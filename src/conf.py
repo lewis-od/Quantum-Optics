@@ -1,1 +1,1 @@
-T = 10 # Truncation of calculations
+T = 50 # Truncation of calculations
