@@ -45,7 +45,7 @@ def squeezed1(z, T=conf.T):
     """
     if z == 0:
         # S(0) is the identity operator
-        return fock(T=T)
+        return fock(0, T=T)
 
     def c(i):
         """Coefficient of basis state |i>"""
