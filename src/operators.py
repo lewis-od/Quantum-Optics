@@ -23,6 +23,10 @@ def squeezing(z, T):
     """
     Returns the single-mode squeezing operator as a TxT matrix
     """
-    a = annihilation(T)
-    S = expm(-(z/2)*(a.H**2) + (np.conj(z)/2)*(a**2))
-    return S   
+    a = np.array(annihilation(T))
+    aH = np.conj(a).T
+    a2 = np.linalg.matrix_power(a,2)
+    aH2 = np.linalg.matrix_power(aH,2)
+    # a is real so Hermitian conjugate is just transpose
+    S = expm(-(z/2)*aH2 + (np.conj(z)/2)*a2)
+    return S
