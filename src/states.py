@@ -1,7 +1,7 @@
 import numpy as np
-import conf
+from . import conf
 from scipy.special import factorial
-import operators as ops
+from . import operators as ops
 
 def fock(n, T=conf.T):
     """
