@@ -43,6 +43,10 @@ def squeezed1(z, T=conf.T):
     Squeezed states (single-mode) from analytic expression in Fock basis
     :param z: Complex number that parametrises the squeezed state
     """
+    if z == 0:
+        # S(0) is the identity operator
+        return fock(T=T)
+
     def c(i):
         """Coefficient of basis state |i>"""
         n = i/2
@@ -52,8 +56,9 @@ def squeezed1(z, T=conf.T):
         cn *= np.tanh(np.abs(z))**n
         return cn
     state = [c(n) for n in range(T)]
+
     # Squeezed states only have an even number of photons - set coefficients of
-    # odd |i> basis states to 0
+    # odd Fock states to 0
     zeros = np.zeros(len(state[1::2]))
     state[1::2] = zeros
     return np.array(state)
