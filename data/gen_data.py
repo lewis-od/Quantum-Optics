@@ -1,8 +1,8 @@
 import sys
 import os
 # TODO: There must be a better way to do this?
-parent = os.path.abspath(os.path.join(__file__, os.pardir))
-parent = os.path.abspath(os.path.join(parent, os.pardir))
+directory = os.path.abspath(os.path.join(__file__, os.pardir))
+parent = os.path.abspath(os.path.join(directory, os.pardir))
 sys.path.append(parent)
 
 import numpy as np
@@ -31,6 +31,14 @@ def gen_states(n):
         state[-1] = id
         states[i] = state
     return states
+
+def save_data(data, name):
+    output = os.path.join(directory, name)
+    try:
+        np.save(output, data)
+        print("Created file " + output)
+    except Exception as e:
+        print("Unable to create file " + output + ": " + str(e))
 
 def parse_arg(n):
     argument = None
@@ -62,5 +70,12 @@ if __name__ == '__main__':
     qo.conf.T = params[3]
 
     print("Generating data with (train,test,val,T) = {}".format(params))
+
+    # Generate data
     training = gen_states(params[0])
-    print(training)
+    test = gen_states(params[1])
+    validation = gen_states(params[2])
+
+    save_data(training, "train")
+    save_data(test, "test")
+    save_data(validation, "validation")
