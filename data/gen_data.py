@@ -5,6 +5,7 @@ directory = os.path.abspath(os.path.join(__file__, os.pardir))
 parent = os.path.abspath(os.path.join(directory, os.pardir))
 sys.path.append(parent)
 
+import argparse
 import numpy as np
 import quoptics as qo
 
@@ -33,7 +34,15 @@ def gen_states(n):
     return states
 
 def save_data(data, name):
-    output = os.path.join(directory, name)
+    output = os.path.join(directory, name + ".npy")
+    if os.path.isfile(output):
+        print("File {} already exists, do you want to overwrite it? (y/n)".format(output))
+        res = input()
+        while res not in ['y', 'n']:
+            print("Invalid input: " + res)
+            res = input()
+        if res == 'n':
+            return
     try:
         np.save(output, data)
         print("Created file " + output)
@@ -49,32 +58,30 @@ def parse_arg(n):
     return argument
 
 if __name__ == '__main__':
-    # Default values - training, test, validation, truncation
-    params = [10, 5, 5, qo.conf.T]
+    # Create argument parser
+    parser = argparse.ArgumentParser(description=("Generate data for training "
+        "the neural network"))
+    parser.add_argument('--training', type=int, required=False, default=100,
+        help='Number of states to generate for training (default: 100)')
+    parser.add_argument('--test', type=int, required=False, default=25,
+        help='Number of states to generate for testing (default: 25)')
+    parser.add_argument('--validation', type=int, required=False, default=25,
+        help='Number of states to generate for validation (default: 25)')
+    parser.add_argument('--truncation', type=int, required=False, default=50,
+        help='Length of state vectors generated (default: 50)')
 
-    # Name of file is first argument
-    n_args = len(sys.argv) - 1
-    if n_args > 4:
-        print("Too many arguments supplied - maximum is 3")
-        sys.exit()
-
-    # Parse all given arguments
-    for n in range(n_args):
-        params[n] = parse_arg(n+1)
-
-    if np.any([p is None for p in params]):
-        print("All arguments must be integers")
-        sys.exit()
+    # Parse arguments
+    params = parser.parse_args()
 
     # Set module-wide truncation
-    qo.conf.T = params[3]
+    qo.conf.T = params.truncation
 
-    print("Generating data with (train,test,val,T) = {}".format(params))
+    print("Generating data with params {}".format(params.__dict__))
 
     # Generate data
-    training = gen_states(params[0])
-    test = gen_states(params[1])
-    validation = gen_states(params[2])
+    training = gen_states(params.training)
+    test = gen_states(params.test)
+    validation = gen_states(params.validation)
 
     save_data(training, "train")
     save_data(test, "test")
