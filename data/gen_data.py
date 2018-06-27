@@ -19,14 +19,18 @@ def gen_states(n):
         # Cycle through the types of state
         id = i % len(types) # Integer identifying type of state
         type = types[id]
+        # TODO: Made state a 2T dimensional vector to store real/complex or
+        # modulus/argument as separate features
         state = np.zeros([qo.conf.T + 1])
         # Generate the state
         if type == 'fock':
             param = np.random.randint(0, qo.conf.T)
             state[:-1] = qo.states.fock(param)
         elif type == 'coherent':
+            # TODO: Generate random complex number
             state[:-1] = qo.states.coherent(2)
         elif type == 'squeezed':
+            # TODO: Generate random complex number
             state[:-1] = qo.states.squeezed(2)
         # Last entry of array is a number identifying the type of state
         state[-1] = id
