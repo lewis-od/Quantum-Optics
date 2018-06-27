@@ -14,31 +14,28 @@ def gen_states(n):
     # Types of state
     types = ['fock', 'coherent', 'squeezed']
     # Array to hold all generated states
-    states = np.zeros([n, qo.conf.T + 1])
+    states = np.zeros([n, qo.conf.T])
+    labels = np.zeros(n)
     for i in range(n):
         # Cycle through the types of state
         id = i % len(types) # Integer identifying type of state
+        labels[i] = id
         type = types[id]
-        # TODO: Made state a 2T dimensional vector to store real/complex or
-        # modulus/argument as separate features
-        state = np.zeros([qo.conf.T + 1])
         # Generate the state
         if type == 'fock':
             param = np.random.randint(0, qo.conf.T)
-            state[:-1] = qo.states.fock(param)
+            states[i] = qo.states.fock(param)
         elif type == 'coherent':
             # TODO: Generate random complex number
-            state[:-1] = qo.states.coherent(2)
+            states[i] = qo.states.coherent(2)
         elif type == 'squeezed':
             # TODO: Generate random complex number
-            state[:-1] = qo.states.squeezed(2)
+            states[i] = qo.states.squeezed(2)
         # Last entry of array is a number identifying the type of state
-        state[-1] = id
-        states[i] = state
-    return states
+    return (states, labels)
 
 def save_data(data, name):
-    output = os.path.join(directory, name + ".npy")
+    output = os.path.join(directory, name + ".npz")
     if os.path.isfile(output):
         print("File {} already exists, do you want to overwrite it? (y/n)".format(output))
         res = input()
@@ -48,7 +45,7 @@ def save_data(data, name):
         if res == 'n':
             return
     try:
-        np.save(output, data)
+        np.savez(output, states=data[0], labels=data[1])
         print("Created file " + output)
     except Exception as e:
         print("Unable to create file " + output + ": " + str(e))
