@@ -8,7 +8,7 @@ deltas = np.zeros(100) # Array for storing differences of calculates states
 for i in range(len(alphas)):
     alpha = alphas[i]
     # Calculate the difference in the 2 methods of calculation
-    delta = states.coherent1(alpha, T=T) - states.coherent2(alpha, T=T)
+    delta = states.coherent(alpha, T=T) - states.coherent2(alpha, T=T)
     # Store the norm of the difference of the vectors
     deltas[i] = np.linalg.norm(delta)
 

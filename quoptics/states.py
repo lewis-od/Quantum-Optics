@@ -18,7 +18,7 @@ def fock(n, T=conf.T):
     f[n] = 1
     return f
 
-def coherent1(alpha, T=conf.T):
+def coherent(alpha, T=conf.T):
     """
     Coherent states from analytic expression in Fock basis
     :param alpha: Complex number parametrising the coherent state
@@ -38,7 +38,7 @@ def coherent2(alpha, T=conf.T):
     state = np.array(state) # Convert from np.matrix to np.array
     return state
 
-def squeezed1(z, T=conf.T):
+def squeezed(z, T=conf.T):
     """
     Squeezed states (single-mode) from analytic expression in Fock basis
     :param z: Complex number that parametrises the squeezed state

@@ -8,7 +8,7 @@ alphas = np.array([np.exp(1j*theta) for theta in thetas])
 deltas = np.zeros(100)
 for i in range(len(alphas)):
     alpha = alphas[i]
-    delta = states.coherent1(alpha, T=T) - states.coherent2(alpha, T=T)
+    delta = states.coherent(alpha, T=T) - states.coherent2(alpha, T=T)
     deltas[i] = np.linalg.norm(delta)
 
 plt.figure()
