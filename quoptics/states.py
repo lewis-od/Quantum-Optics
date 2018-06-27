@@ -3,11 +3,12 @@ from . import conf
 from scipy.special import factorial
 from . import operators as ops
 
-def fock(n, T=conf.T):
+def fock(n, T=None):
     """
     Basis number states
     :param n: Number of the Fock state
     """
+    if T is None: T = conf.T
     # Check n is non-negative int less than T
     if not isinstance(n, (int, np.integer)) or n < 0:
         raise ValueError("n must be a non-negative integer")
@@ -18,31 +19,34 @@ def fock(n, T=conf.T):
     f[n] = 1
     return f
 
-def coherent(alpha, T=conf.T):
+def coherent(alpha, T=None):
     """
     Coherent states from analytic expression in Fock basis
     :param alpha: Complex number parametrising the coherent state
     """
+    if T is None: T = conf.T
     state = [(alpha**n)/np.sqrt(factorial(n)) for n in range(T)]
     state = np.array(state)
     state = state * np.exp(-(np.abs(alpha)**2)/2)
     return state
 
-def coherent2(alpha, T=conf.T):
+def coherent2(alpha, T=None):
     """
     Coherent states created from the displacement operator
     :param alpha: Complex number parametrising the coherent state
     """
+    if T is None: T = conf.T
     D = ops.displacement(alpha, T)
     state = np.matmul(D, fock(0, T=T)) # Act on vacuum state with D(alpha)
     state = np.array(state) # Convert from np.matrix to np.array
     return state
 
-def squeezed(z, T=conf.T):
+def squeezed(z, T=None):
     """
     Squeezed states (single-mode) from analytic expression in Fock basis
     :param z: Complex number that parametrises the squeezed state
     """
+    if T is None: T = conf.T
     if z == 0:
         # S(0) is the identity operator
         return fock(0, T=T)
@@ -63,11 +67,12 @@ def squeezed(z, T=conf.T):
     state[1::2] = zeros
     return np.array(state)
 
-def squeezed2(z, T=conf.T):
+def squeezed2(z, T=None):
     """
     Squeezed states (single-mode) from squeezing operator
     :param z: Complex number that parametrises the squeezed state
     """
+    if T is None: T = conf.T
     # Single-mode squeezing operator
     S = ops.squeezing(z, T)
     state = np.matmul(S, fock(0, T=T))
