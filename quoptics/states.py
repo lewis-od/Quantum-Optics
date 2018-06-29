@@ -55,8 +55,7 @@ class _State(ABC):
     def avg_n(self):
         """Calculates the expected/average number of photons in the state"""
         n = ops.number(self.T) # Number operator
-        n_psi = np.matmul(n, self.data)
-        n_psi = np.array(n_psi)[0]
+        n_psi = n @ self.data
         return np.dot(np.conj(self.data), n_psi)
 
     def _gen_data(self):
@@ -98,9 +97,10 @@ class Fock(_State):
         return _fock(self.n, self.T)
 
     def _gen_op(self):
-        creation = ops.annihilation(self.T).H
+        creation = ops.creation(self.T)
         fock_op = np.linalg.matrix_power(creation, self.n)
-        return np.matmul(fock_op, _fock(0, self.T))
+        norm_factor = np.product([np.sqrt(i) for i in range(1, self.n+1)])
+        return (fock_op @ _fock(0, self.T)) / norm_factor
 
 class Coherent(_State):
     """
@@ -170,7 +170,7 @@ def _coherent2(alpha, T):
     :param alpha: Complex number parametrising the coherent state
     """
     D = ops.displacement(alpha, T)
-    state = np.matmul(D, _fock(0, T)) # Act on vacuum state with D(alpha)
+    state = D @ _fock(0, T) # Act on vacuum state with D(alpha)
     state = np.array(state) # Convert from np.matrix to np.array
     return state
 
@@ -202,5 +202,5 @@ def _squeezed2(z, T):
     """
     # Single-mode squeezing operator
     S = ops.squeezing(z, T)
-    state = np.matmul(S, _fock(0, T))
+    state = S @ _fock(0, T)
     return np.array(state)
