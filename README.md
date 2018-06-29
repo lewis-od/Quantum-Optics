@@ -11,8 +11,8 @@ vector is the coefficient of |n>, or equivalently `psi[n] = <psi|n>`
 
 Run `python data/gen_data.py` to generate training/test/validation data for the
 network. The data is produced as an array of states and an array of labels, such
- that states[n] is labelled by label[n]. The labels are integers labelling what
- type the state is according to:
+ that `states[n]` is labelled by `label[n]`. The labels are integers labelling
+ which type the state is according to:
 
 | Label  | State Type |
 | ------ | ---------- |
