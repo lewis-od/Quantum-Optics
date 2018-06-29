@@ -36,6 +36,13 @@ class _State(ABC):
         """Calculates the inner product of the state with itself (the norm)"""
         return self.inner_prod(self)
 
+    def avg_n(self):
+        """Calculates the expected/average number of photons in the state"""
+        n = ops.number(self.T) # Number operator
+        n_psi = np.matmul(n, self.data)
+        n_psi = np.array(n_psi)[0]
+        return np.dot(np.conj(self.data), n_psi)
+
     def _gen_data(self):
         self.data = self._gen_analytic() if self.analytic else self._gen_op()
 

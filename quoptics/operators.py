@@ -11,6 +11,10 @@ def annihilation(T):
         a[i, i+1] = np.sqrt(i+1)
     return a
 
+def number(T):
+    a = annihilation(T)
+    return np.matmul(a.H, a)
+
 def displacement(alpha, T):
     """
     Returns the displacement operator D(alpha) as a TxT matrix
