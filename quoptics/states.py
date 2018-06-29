@@ -11,7 +11,7 @@ class _State(ABC):
     """
     def __init__(self, analytic=True, T=None, **kwargs):
         self._analytic = analytic
-        self.T = conf.T if T is None else T
+        self._T = conf.T if T is None else T
         self.data = np.empty(self.T)
         self.params = kwargs
         super().__init__()
@@ -24,6 +24,15 @@ class _State(ABC):
     @analytic.setter
     def analytic(self, value):
         self._analytic = value
+        self._gen_data()
+
+    @property
+    def T(self):
+        return self._T
+
+    @T.setter
+    def T(self, value):
+        self._T = value
         self._gen_data()
 
     def inner_prod(self, state):
