@@ -9,11 +9,20 @@ class _State(ABC):
     Base state object
     """
     def __init__(self, analytic=True, T=None, **kwargs):
-        self.analytic = analytic
+        self._analytic = analytic
         self.T = conf.T if T is None else T
         self.data = np.empty(self.T)
         self.params = kwargs
         super().__init__()
+        self._gen_data()
+
+    @property
+    def analytic(self):
+        return self._analytic
+
+    @analytic.setter
+    def analytic(self, value):
+        self._analytic = value
         self._gen_data()
 
     def _gen_data(self):
@@ -34,8 +43,17 @@ class Fock(_State):
     """
     def __init__(self, n, analytic=True, T=None):
         self.type = 'fock'
-        self.n = n
+        self._n = n
         super().__init__(analytic=analytic, T=T, n=n)
+
+    @property
+    def n(self):
+        return self._n
+
+    @n.setter
+    def n(self, value):
+        self._n = value
+        self._gen_data()
 
     def _gen_analytic(self):
         return _fock(self.n, self.T)
@@ -52,8 +70,17 @@ class Coherent(_State):
     """
     def __init__(self, alpha, analytic=True, T=None):
         self.type = 'coherent'
-        self.alpha = alpha
+        self._alpha = alpha
         super().__init__(analytic=analytic, T=T, alpha=alpha)
+
+    @property
+    def alpha(self):
+        return self._alpha
+
+    @alpha.setter
+    def alpha(self, value):
+        self._alpha = value
+        self._gen_data()
 
     def _gen_analytic(self):
         return _coherent1(self.alpha, self.T)
@@ -68,8 +95,17 @@ class Squeezed(_State):
     """
     def __init__(self, z, analytic=True, T=None):
         self.type = 'squeezed'
-        self.z = z
+        self._z = z
         super().__init__(analytic=analytic, T=T, z=z)
+
+    @property
+    def z(self):
+        return self._z
+
+    @z.setter
+    def z(self, value):
+        self._z = value
+        self._gen_data()
 
     def _gen_analytic(self):
         return _squeezed1(self.z, self.T)
