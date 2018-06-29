@@ -1,9 +1,10 @@
 import numpy as np
 from abc import ABC, abstractmethod
-from . import conf
 from scipy.special import factorial
+from . import conf
 from . import operators as ops
 
+## Classes representing different types of state
 class _State(ABC):
     """
     Base state object
@@ -24,6 +25,16 @@ class _State(ABC):
     def analytic(self, value):
         self._analytic = value
         self._gen_data()
+
+    def inner_prod(self, state):
+        """Calculates the inner product of this state with another"""
+        phi = np.conj(state.data)
+        psi = self.data
+        return np.dot(phi, psi)
+
+    def norm(self):
+        """Calculates the inner product of the state with itself (the norm)"""
+        return self.inner_prod(self)
 
     def _gen_data(self):
         self.data = self._gen_analytic() if self.analytic else self._gen_op()
