@@ -12,15 +12,21 @@ class _State(ABC):
     def __init__(self, analytic=True, T=None, **kwargs):
         self._analytic = analytic
         self._T = conf.T if T is None else T
-        self.data = np.empty(self.T)
+        self._data = np.empty(self.T)
         self.params = kwargs
         super().__init__()
         self._gen_data()
+
+    # Make self.data read-only
+    @property
+    def data(self):
+        return self._data
 
     @property
     def analytic(self):
         return self._analytic
 
+    # Re-calculate data using correct method when self.analytic is changed
     @analytic.setter
     def analytic(self, value):
         self._analytic = value
@@ -30,6 +36,7 @@ class _State(ABC):
     def T(self):
         return self._T
 
+    # Recalculate data with correct truncation when self.T is changed
     @T.setter
     def T(self, value):
         self._T = value
@@ -37,9 +44,9 @@ class _State(ABC):
 
     def inner_prod(self, state):
         """Calculates the inner product of this state with another"""
-        phi = np.conj(state.data)
+        phi_star = np.conj(state.data)
         psi = self.data
-        return np.dot(phi, psi)
+        return np.dot(phi_star, psi)
 
     def norm(self):
         """Calculates the inner product of the state with itself (the norm)"""
@@ -53,14 +60,19 @@ class _State(ABC):
         return np.dot(np.conj(self.data), n_psi)
 
     def _gen_data(self):
-        self.data = self._gen_analytic() if self.analytic else self._gen_op()
+        self._data = self._gen_analytic() if self.analytic else self._gen_op()
 
     @abstractmethod
     def _gen_analytic(self):
+        """Calculates the state data using an analytic expression"""
         pass
 
     @abstractmethod
     def _gen_op(self):
+        """
+        Calculates the state data by acting on the vacuum state with the
+        apppropriate operator
+        """
         pass
 
 class Fock(_State):
