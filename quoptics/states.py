@@ -8,15 +8,23 @@ class _State(ABC):
     """
     Base state object
     """
-    def __init__(self, T=None, **kwargs):
+    def __init__(self, analytic=True, T=None, **kwargs):
+        self.analytic = analytic
         self.T = conf.T if T is None else T
         self.data = np.empty(self.T)
         self.params = kwargs
         super().__init__()
         self._gen_data()
 
-    @abstractmethod
     def _gen_data(self):
+        self.data = self._gen_analytic() if self.analytic else self._gen_op()
+
+    @abstractmethod
+    def _gen_analytic(self):
+        pass
+
+    @abstractmethod
+    def _gen_op(self):
         pass
 
 class Fock(_State):
@@ -24,39 +32,50 @@ class Fock(_State):
     Basis number states
     :param n: Number of the Fock state
     """
-    def __init__(self, n, T=None):
+    def __init__(self, n, analytic=True, T=None):
         self.type = 'fock'
         self.n = n
-        super().__init__(T=T, n=n)
+        super().__init__(analytic=analytic, T=T, n=n)
 
-    def _gen_data(self):
-        self.data = _fock(self.n, self.T)
+    def _gen_analytic(self):
+        return _fock(self.n, self.T)
+
+    def _gen_op(self):
+        creation = ops.annihilation(self.T).H
+        fock_op = np.linalg.matrix_power(creation, self.n)
+        return np.matmul(fock_op, _fock(0, self.T))
 
 class Coherent(_State):
     """
     Coherent states from analytic expression in Fock basis
     :param alpha: Complex number parametrising the coherent state
     """
-    def __init__(self, alpha, T=None):
+    def __init__(self, alpha, analytic=True, T=None):
         self.type = 'coherent'
         self.alpha = alpha
-        super().__init__(T=T, alpha=alpha)
+        super().__init__(analytic=analytic, T=T, alpha=alpha)
 
-    def _gen_data(self):
-        self.data = _coherent1(self.alpha, self.T)
+    def _gen_analytic(self):
+        return _coherent1(self.alpha, self.T)
+
+    def _gen_op(self):
+        return _coherent2(self.alpha, self.T)
 
 class Squeezed(_State):
     """
     Squeezed states (single-mode) from analytic expression in Fock basis
     :param z: Complex number that parametrises the squeezed state
     """
-    def __init__(self, z, T=None):
+    def __init__(self, z, analytic=True, T=None):
         self.type = 'squeezed'
         self.z = z
-        super().__init__(T=T, z=z)
+        super().__init__(analytic=analytic, T=T, z=z)
 
-    def _gen_data(self):
-        self.data = _squeezed1(self.z, self.T)
+    def _gen_analytic(self):
+        return _squeezed1(self.z, self.T)
+
+    def _gen_op(self):
+        return _squeezed2(self.z, self.T)
 
 ## Helper methods for generating state data
 def _fock(n, T):
@@ -76,7 +95,7 @@ def _coherent2(alpha, T):
     :param alpha: Complex number parametrising the coherent state
     """
     D = ops.displacement(alpha, T)
-    state = np.matmul(D, fock(0, T=T)) # Act on vacuum state with D(alpha)
+    state = np.matmul(D, _fock(0, T)) # Act on vacuum state with D(alpha)
     state = np.array(state) # Convert from np.matrix to np.array
     return state
 
@@ -108,5 +127,5 @@ def _squeezed2(z, T):
     """
     # Single-mode squeezing operator
     S = ops.squeezing(z, T)
-    state = np.matmul(S, fock(0, T=T))
+    state = np.matmul(S, _fock(0, T))
     return np.array(state)
