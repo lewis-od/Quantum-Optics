@@ -50,7 +50,7 @@ class _State(ABC):
 
     def norm(self):
         """Calculates the inner product of the state with itself (the norm)"""
-        return self.inner_prod(self)
+        return np.real(self.inner_prod(self))
 
     def avg_n(self):
         """Calculates the expected/average number of photons in the state"""
