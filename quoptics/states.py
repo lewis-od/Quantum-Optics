@@ -127,6 +127,57 @@ class Coherent(_State):
     def _gen_op(self):
         return _coherent2(self.alpha, self.T)
 
+class Cat(Coherent):
+    """
+    Cat states are a superposition of coherent states given by:
+        |cat> = (1\sqrt(2))*(|alpha> +/- |-alpha>)
+    Where |alpha> are coherent states
+    :param alpha: Complex number parametrising the state
+    :param sign: The sign to use when combining the coherent states ('+' or '-')
+    """
+    def __init__(self, alpha, sign='+', analytic=True, T=None):
+        # Sign needs to be set before call to super, since super.__init__ will
+        # call _gen_data, which requires self._sign to be set
+        self._validate_sign(sign)
+        self._sign = '+'
+        super().__init__(alpha, analytic=analytic, T=T)
+        self.type = 'cat'
+        self.params['sign'] = sign
+
+    @property
+    def sign(self):
+        return self._sign
+
+    @sign.setter
+    def sign(self, value):
+        self._validate_sign(value)
+        self._sign = value
+        self._gen_data()
+
+    def _validate_sign(self, sign):
+        if sign not in ['+', '-']:
+            raise ValueError("Sign must be either '+' or '-'.")
+
+    def _gen_analytic(self):
+        alpha = _coherent1(self.alpha, self.T)
+        minus_alpha = _coherent1(-self.alpha, self.T)
+        data = None
+        if self.sign == '+':
+            data = alpha + minus_alpha
+        else:
+            data = alpha - minus_alpha
+        return (1.0/np.sqrt(2)) * data
+
+    def _gen_op(self):
+        alpha = _coherent2(self.alpha, self.T)
+        minus_alpha = _coherent2(-self.alpha, self.T)
+        data = None
+        if self.sign == '+':
+            data = alpha + minus_alpha
+        else:
+            data = alpha - minus_alpha
+        return (1.0/np.sqrt(2)) * data
+
 class Squeezed(_State):
     """
     Squeezed states (single-mode) from analytic expression in Fock basis
