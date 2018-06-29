@@ -13,6 +13,9 @@ def gen_states(n):
     """Generates n random states"""
     # Types of state
     types = ['fock', 'coherent', 'squeezed']
+    fock = qo.states.Fock(0)
+    coherent = qo.states.Coherent(0)
+    squeezed = qo.states.Squeezed(0)
     # Array to hold all generated states
     states = np.zeros([n, qo.conf.T], dtype=np.complex64)
     labels = np.zeros(n)
@@ -23,20 +26,20 @@ def gen_states(n):
         type = types[id]
         # Generate the state
         if type == 'fock':
-            param = np.random.randint(0, qo.conf.T)
-            states[i] = qo.states.fock(param)
+            fock.n = np.random.randint(0, qo.conf.T)
+            states[i] = fock.data
         elif type == 'coherent':
             # Random complex num with |alpha| < 1
             r = np.random.rand()
             theta = np.random.rand() * np.pi * 2
-            alpha = r * np.exp(1j * theta)
-            states[i] = qo.states.coherent(alpha)
+            coherent.alpha = r * np.exp(1j * theta)
+            states[i] = coherent.data
         elif type == 'squeezed':
             # Random complex number with |z| < 1
             r = np.random.rand()
             theta = np.random.rand() * np.pi * 2
-            z = r * np.exp(1j * theta)
-            states[i] = qo.states.squeezed(z)
+            squeezed.z = r * np.exp(1j * theta)
+            states[i] = squeezed.data
     return (states, labels)
 
 def save_data(data, name):
