@@ -9,13 +9,21 @@ import argparse
 import numpy as np
 import quoptics as qo
 
+def rand_complex(modulus):
+    """Generates a random complex number with |z| < modulus"""
+    r = np.random.rand() * modulus
+    theta = np.random.rand() * np.pi * 2
+    z = r * np.exp(1j*theta)
+    return z
+
 def gen_states(n):
     """Generates n random states"""
     # Types of state
-    types = ['fock', 'coherent', 'squeezed']
+    types = ['fock', 'coherent', 'squeezed', 'cat']
     fock = qo.states.Fock(0)
     coherent = qo.states.Coherent(0)
     squeezed = qo.states.Squeezed(0)
+    cat = qo.states.Cat(0)
     # Array to hold all generated states
     states = np.zeros([n, qo.conf.T], dtype=np.complex64)
     labels = np.zeros(n)
@@ -29,17 +37,19 @@ def gen_states(n):
             fock.n = np.random.randint(0, qo.conf.T)
             states[i] = fock.data
         elif type == 'coherent':
-            # Random complex num with |alpha| < 1
-            r = np.random.rand()
-            theta = np.random.rand() * np.pi * 2
-            coherent.alpha = r * np.exp(1j * theta)
+            coherent.alpha = rand_complex(1.0)
             states[i] = coherent.data
         elif type == 'squeezed':
-            # Random complex number with |z| < 1
-            r = np.random.rand()
-            theta = np.random.rand() * np.pi * 2
-            squeezed.z = r * np.exp(1j * theta)
+            squeezed.z = rand_complex(1.0)
             states[i] = squeezed.data
+        elif type == 'cat':
+            # Choose sign of cat state at random
+            cat.sign = ['+', '-'][np.random.randint(2)]
+            cat.alpha = rand_complex(1.0)
+            states[i] = cat.data
+        else:
+            raise ValueError("Invalid type supplied")
+
     return (states, labels)
 
 def save_data(data, name):

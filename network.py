@@ -3,6 +3,9 @@ import tensorflow as tf
 import os
 import sys
 
+# Number of categories to classify states into
+N_TYPES = 4
+
 ## Define the network
 x = tf.placeholder(dtype=tf.float32, shape=[None, 200])
 y = tf.placeholder(dtype=tf.int32, shape=[None])
@@ -10,7 +13,7 @@ y = tf.placeholder(dtype=tf.int32, shape=[None])
 layer1 = tf.contrib.layers.fully_connected(x, 100, tf.nn.relu)
 layer2 = tf.contrib.layers.fully_connected(layer1, 50, tf.nn.relu)
 layer3 = tf.contrib.layers.fully_connected(layer2, 25, tf.nn.relu)
-logits = tf.contrib.layers.fully_connected(layer3, 3, tf.nn.sigmoid)
+logits = tf.contrib.layers.fully_connected(layer3, N_TYPES, tf.nn.sigmoid)
 
 # Use softmax loss function (mutually exclusive categories)
 loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=logits))
@@ -76,6 +79,13 @@ def test(data_dir):
     test_accuracy = float(n_correct) / float(len(test_labels))
     print("{} states out of {} correctly classified".format(n_correct, len(test_labels)))
     print("Test accuracy is: {}".format(test_accuracy))
+
+def classify(state):
+    data = np.abs(state.data)
+    data[np.isnan(data)] = 0.0
+    types = ['fock', 'coherent', 'squeezed', 'cat']
+    index = sess.run(correct_pred, feed_dict={x: [data]})[0]
+    return types[index]
 
 # Initialise the session
 sess = tf.Session()

@@ -1,2 +1,4 @@
 *.pyc
 data/*.npz
+data/three
+weights/three
