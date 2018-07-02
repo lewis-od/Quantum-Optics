@@ -77,8 +77,13 @@ def test(data_dir):
 
     n_correct = np.sum(predicted == test_labels)
     test_accuracy = float(n_correct) / float(len(test_labels))
+
+    conf_mat = sess.run(tf.confusion_matrix(test_labels, predicted))
+
     print("{} states out of {} correctly classified".format(n_correct, len(test_labels)))
     print("Test accuracy is: {}".format(test_accuracy))
+    print("Confusion matrix:")
+    print(conf_mat)
 
 def classify(state):
     data = np.abs(state.data)
@@ -94,11 +99,11 @@ cur_dir = os.path.abspath(os.path.join(__file__, os.pardir))
 data_dir = os.path.join(cur_dir, "data")
 
 ## Train network
-states, labels = load_data(data_dir, "train.npz")
-train(states, labels)
+# states, labels = load_data(data_dir, "train.npz")
+# train(states, labels)
 
 ## Use trained network
-# saver = tf.train.Saver()
-# saver.restore(sess, os.path.join(cur_dir, "weights", "model.ckpt"))
+saver = tf.train.Saver()
+saver.restore(sess, os.path.join(cur_dir, "weights", "model.ckpt"))
 
 test(data_dir)
