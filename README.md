@@ -20,5 +20,8 @@ network. The data is produced as an array of states and an array of labels, such
 |    1   |  Coherent  |
 |    2   |  Squeezed  |
 
-Once the data has been generated, run `python network.py` to train and test the
+After generating some data, run `python network.py` to train and test the
 neural network.
+
+Once the network has been trained, run `tensorboad --logdir=summary` and go to
+[http://localhost:6006](http://localhost:6006) to view a summary of the network.

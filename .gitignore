@@ -2,3 +2,4 @@
 data/*.npz
 data/three
 weights/three
+summary
