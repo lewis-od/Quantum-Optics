@@ -24,4 +24,5 @@ After generating some data, run `python network.py` to train and test the
 neural network.
 
 Once the network has been trained, run `tensorboad --logdir=summary` and go to
-[http://localhost:6006](http://localhost:6006) to view a summary of the network.
+the address shown to view a visual summary of the network (accuracy, loss
+function, values of biases and weights, etc).
