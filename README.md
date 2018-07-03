@@ -19,6 +19,7 @@ network. The data is produced as an array of states and an array of labels, such
 |    0   |    Fock    |
 |    1   |  Coherent  |
 |    2   |  Squeezed  |
+|    3   |    Cat     |
 
 After generating some data, run `python network.py` to train and test the
 neural network.
