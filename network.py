@@ -73,6 +73,12 @@ def classify(data):
     pred = sess.run(prediction, feed_dict={x: [data]})
     return pred[0]
 
+def restore():
+    """Loads the saved model from the weights folder"""
+    loader = tf.train.Saver()
+    model_file = os.path.join(cur_dir, "weights", "model.ckpt")
+    loader.restore(sess, model_file)
+
 if __name__ == '__main__':
     train()
     test()
