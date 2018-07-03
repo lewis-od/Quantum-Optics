@@ -5,15 +5,17 @@ import tensorflow as tf
 ## Helper functions for creating network
 
 def weight_variable(shape):
+    """Creates a weight variable with appropriate initialisation"""
     initial = tf.truncated_normal(shape, stddev=0.1)
     return tf.Variable(initial)
 
 def bias_variable(shape):
+    """Creates a bias variable with appropriate initialisation"""
     initial = tf.constant(0.1, shape=shape)
     return tf.Variable(initial)
 
 def variable_summaries(var):
-  """Attach a lot of summaries to a Tensor (for TensorBoard visualization)."""
+  """Attach summaries to a tensor for visualisation in tensorboard"""
   with tf.name_scope('summaries'):
     mean = tf.reduce_mean(var)
     tf.summary.scalar('mean', mean)
@@ -25,6 +27,7 @@ def variable_summaries(var):
     tf.summary.histogram('histogram', var)
 
 def nn_layer(input_tensor, input_dim, output_dim, name, act=tf.nn.relu):
+    """Create a neural network layer with summaries attached"""
     with tf.name_scope(name):
         with tf.name_scope('weights'):
             weights = weight_variable([input_dim, output_dim])
@@ -39,9 +42,11 @@ def nn_layer(input_tensor, input_dim, output_dim, name, act=tf.nn.relu):
         tf.summary.histogram('activations', activations)
         return activations
 
+# Create a tensorflow session
 sess = tf.Session()
 
 ## Define the network graph
+
 with tf.name_scope('input'):
     x = tf.placeholder(dtype=tf.float32, shape=[None, 200], name='x_input')
     y_ = tf.placeholder(dtype=tf.int64, shape=[None], name='y_input')
@@ -51,13 +56,16 @@ hidden1 = nn_layer(x, 200, 50, 'layer1')
 # calculating the loss
 y = nn_layer(hidden1, 50, 4, 'layer2', act=tf.identity)
 
+# Use cross entropy loss function
 with tf.name_scope('cross_entropy'):
     cross_entropy = tf.losses.sparse_softmax_cross_entropy(labels=y_, logits=y)
 tf.summary.scalar('cross_entropy', cross_entropy)
 
+# Train using the ADAM optimiser
 with tf.name_scope('train'):
     train_op = tf.train.AdamOptimizer(learning_rate=0.001).minimize(cross_entropy)
 
+# Calculate the accuracy of the network
 with tf.name_scope('accuracy'):
     with tf.name_scope('correct_prediction'):
         prediction = tf.argmax(y, 1)
@@ -66,10 +74,13 @@ with tf.name_scope('accuracy'):
         accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 tf.summary.scalar('accuracy', accuracy)
 
+# Merge all summary nodes into one
 merged_summs = tf.summary.merge_all()
+# Initialise all variables
 sess.run(tf.global_variables_initializer())
 
 ## Helper functions for handling data
+
 def load_data(dir, name):
     """Loads a .npz file from the data directory"""
     if name.split('.')[-1] != 'npz':
@@ -94,18 +105,24 @@ cur_dir = os.path.abspath(os.path.join(__file__, os.pardir))
 data_dir = os.path.join(cur_dir, "data")
 
 ## Train the network
+
 def train():
+    """Trains the network and tests its accuracy"""
+    # Load training and test data
     train_states, train_labels = load_data(data_dir, "train")
     test_states, test_labels = load_data(data_dir, "test")
+    # These write the network data for visualization later in tensorboard
     train_writer = tf.summary.FileWriter(os.path.join(cur_dir, "summary", "train"), sess.graph)
     test_writer = tf.summary.FileWriter(os.path.join(cur_dir, "summary", "test"))
 
     for epoch in range(500):
         if epoch % 10 == 0:
+            # Evaluate network performance every 10 epochs
             summary, acc = sess.run([merged_summs, accuracy], feed_dict={x: test_states, y_: test_labels})
             test_writer.add_summary(summary, epoch)
             print("Accuracy at step {} is : {}".format(epoch, acc))
         else:
+            # TODO: More elegant batch training
             for b_n in range(5):
                 batch = fetch_batch(train_states, train_labels, b_n, 1000)
                 if epoch % 100 == 99 and b_n == 1:
@@ -125,11 +142,15 @@ def train():
 
 ## Test the network
 def test():
+    """Tests the network and prints out various statistics"""
+    # Load test data
     test_states, test_labels = load_data(data_dir, "test")
+    # Test the network
     test_predictions, acc = sess.run([prediction, accuracy],
         feed_dict={ x: test_states, y_: test_labels })
     n_correct = np.sum(test_predictions == test_labels)
     conf_mat = sess.run(tf.confusion_matrix(test_labels, test_predictions))
+    # Print the accuracy and confusion matrix
     print("Network classifed {}/{} states correctly ({:.2f}%)".format(n_correct,
         len(test_labels), acc*100))
     print("Confusion matrix:")
