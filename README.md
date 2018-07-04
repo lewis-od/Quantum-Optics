@@ -7,7 +7,7 @@ The `quoptics` module contains useful code for producing various states (e.g.
 coherent states, squeezed states, etc). It also has matrix representations of
 various operators.
 The vectors it produces are in the Fock basis, so the nth component of the
-vector is the coefficient of |n>, or equivalently `psi[n] = <psi|n>`
+vector is the coefficient of |n>, or equivalently `psi[n] = <n|psi>`
 
 Run `python data/gen_data.py` to generate training/test/validation data for the
 network. The data is produced as an array of states and an array of labels, such
