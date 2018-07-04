@@ -2,6 +2,10 @@ import os
 import numpy as np
 import tensorflow as tf
 
+## Hyperparameters
+KEEP_PROB = 0.2
+LEARNING_RATE = 0.001
+
 ## Helper functions for creating network
 
 def weight_variable(shape):
@@ -52,9 +56,16 @@ with tf.name_scope('input'):
     y_ = tf.placeholder(dtype=tf.int64, shape=[None], name='y_input')
 
 hidden1 = nn_layer(x, 200, 50, 'layer1')
+
+with tf.name_scope("droput"):
+    keep_prob = tf.placeholder(dtype=tf.float32)
+    tf.summary.scalar('dropout_keep_probability', keep_prob)
+    dropped = tf.nn.dropout(hidden1, keep_prob)
+
+hidden2 = nn_layer(dropped, 50, 25, 'layer2')
 # Don't apply softmax activation yet, it's applied automatically when
 # calculating the loss
-y = nn_layer(hidden1, 50, 4, 'layer2', act=tf.identity)
+y = nn_layer(hidden2, 25, 4, 'layer3', act=tf.identity)
 
 # Use cross entropy loss function
 with tf.name_scope('cross_entropy'):
@@ -63,7 +74,8 @@ tf.summary.scalar('cross_entropy', cross_entropy)
 
 # Train using the ADAM optimiser
 with tf.name_scope('train'):
-    train_op = tf.train.AdamOptimizer(learning_rate=0.001).minimize(cross_entropy)
+    train_op = tf.train.AdamOptimizer(
+        learning_rate=LEARNING_RATE).minimize(cross_entropy)
 
 # Calculate the accuracy of the network
 with tf.name_scope('accuracy'):
@@ -118,7 +130,11 @@ def train():
     for epoch in range(500):
         if epoch % 10 == 0:
             # Evaluate network performance every 10 epochs
-            summary, acc = sess.run([merged_summs, accuracy], feed_dict={x: test_states, y_: test_labels})
+            summary, acc = sess.run([merged_summs, accuracy],
+                feed_dict={ x: test_states,
+                            y_: test_labels,
+                            keep_prob: 1.0
+            })
             test_writer.add_summary(summary, epoch)
             print("Accuracy at step {} is : {}".format(epoch, acc))
         else:
@@ -128,13 +144,13 @@ def train():
                 if epoch % 100 == 99 and b_n == 1:
                     run_metadata = tf.RunMetadata()
                     summary, _ = sess.run([merged_summs, train_op],
-                        feed_dict={x: batch[0], y_: batch[1]},
+                        feed_dict={x: batch[0], y_: batch[1], keep_prob: KEEP_PROB},
                         run_metadata=run_metadata)
                     train_writer.add_run_metadata(run_metadata, 'step%03d-%01d' % (epoch, b_n))
                     train_writer.add_summary(summary, epoch)
                 else:
                     summary, _ = sess.run([merged_summs, train_op],
-                        feed_dict={x: batch[0], y_: batch[1]})
+                        feed_dict={x: batch[0], y_: batch[1], keep_prob: KEEP_PROB})
                     train_writer.add_summary(summary, epoch)
     train_writer.close()
     test_writer.close()
@@ -147,7 +163,7 @@ def test():
     test_states, test_labels = load_data(data_dir, "test")
     # Test the network
     test_predictions, acc = sess.run([prediction, accuracy],
-        feed_dict={ x: test_states, y_: test_labels })
+        feed_dict={ x: test_states, y_: test_labels, keep_prob: 1.0 })
     n_correct = np.sum(test_predictions == test_labels)
     conf_mat = sess.run(tf.confusion_matrix(test_labels, test_predictions))
     # Print the accuracy and confusion matrix
