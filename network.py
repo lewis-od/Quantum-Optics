@@ -1,4 +1,5 @@
 import os
+import shutil
 import numpy as np
 import tensorflow as tf
 
@@ -123,9 +124,14 @@ def train():
     # Load training and test data
     train_states, train_labels = load_data(data_dir, "train")
     test_states, test_labels = load_data(data_dir, "test")
+    # Directory to save variable summaries to
+    summary_dir = os.path.join(cur_dir, "summary")
+    if os.path.isdir(summary_dir): shutil.rmtree(summary_dir)
     # These write the network data for visualization later in tensorboard
-    train_writer = tf.summary.FileWriter(os.path.join(cur_dir, "summary", "train"), sess.graph)
-    test_writer = tf.summary.FileWriter(os.path.join(cur_dir, "summary", "test"))
+    train_writer = tf.summary.FileWriter(
+        os.path.join(summary_dir, "train"), sess.graph)
+    test_writer = tf.summary.FileWriter(
+        os.path.join(summary_dir, "test"))
 
     for epoch in range(500):
         if epoch % 10 == 0:
