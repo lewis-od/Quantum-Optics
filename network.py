@@ -1,11 +1,27 @@
 import os
 import shutil
+import argparse
 import numpy as np
 import tensorflow as tf
 
 ## Hyperparameters
-KEEP_PROB = 0.2
+
 LEARNING_RATE = 0.001
+KEEP_PROB = 0.3
+
+if __name__ == '__main__':
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description="Train and test the dnn")
+    parser.add_argument('--learning-rate', type=float, required=False,
+        default=0.001, help="Learning rate to used in optimization")
+    parser.add_argument('--keep-prob', type=float, required=False,
+        default=0.3, help="Keep probability to used in dropout training")
+
+    params = parser.parse_args()
+
+    # Set values of hyperparameters to those supplied on the command line
+    KEEP_PROB = params.keep_prob
+    LEARNING_RATE = params.learning_rate
 
 ## Helper functions for creating network
 
@@ -161,6 +177,7 @@ def train():
     train_writer.close()
     test_writer.close()
     print("Training completed.")
+    print('-'*80)
 
 ## Test the network
 def test():
@@ -175,6 +192,9 @@ def test():
     # Print the accuracy and confusion matrix
     print("Network classifed {}/{} states correctly ({:.2f}%)".format(n_correct,
         len(test_labels), acc*100))
+    print("Hyperparameters:")
+    print("    Learning rate: {}".format(LEARNING_RATE))
+    print("    Keep probability: {}".format(KEEP_PROB))
     print("Confusion matrix:")
     print(conf_mat)
 
