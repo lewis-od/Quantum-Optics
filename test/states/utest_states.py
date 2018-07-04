@@ -23,9 +23,10 @@ class TestStates(unittest.TestCase):
         self.assertEqual(len(self.state.data), 100)
 
     def testChangeAnalytic(self):
-        old = list(self.state.data)
+        old = self.state.data
         self.state.analytic = False
-        self.assertNotEqual(old, list(self.state.data))
+        for n in range(len(old)):
+            self.assertAlmostEqual(old[n], self.state.data[n])
 
     def testInnerProduct(self):
         psi = Fock(4)
