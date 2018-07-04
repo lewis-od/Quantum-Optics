@@ -21,10 +21,11 @@ if __name__ == '__main__':
         type=float, required=False,
         metavar='PROB', default=0.3,
         help="Keep probability to used in dropout training")
-    parser.add_argument('--restore',
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--restore',
         required=False, type=str, metavar='DIR',
         help='Load the saved parameter values from DIR instead of training the network')
-    parser.add_argument('--save',
+    group.add_argument('--save',
         required=False, type=str, metavar='DIR',
         help='Save the parameter values to DIR after training')
 
