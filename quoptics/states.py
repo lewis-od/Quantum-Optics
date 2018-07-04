@@ -81,8 +81,9 @@ class Fock(_State):
     """
     def __init__(self, n, analytic=True, T=None):
         self.type = 'fock'
-        self._n = n
+        self._n = 0
         super().__init__(analytic=analytic, T=T, n=n)
+        self.n = n # Validate n
 
     @property
     def n(self):
@@ -90,6 +91,8 @@ class Fock(_State):
 
     @n.setter
     def n(self, value):
+        if value != int(value) or value < 0:
+            raise ValueError("n must be a non-negative integer")
         self._n = value
         self._gen_data()
 
