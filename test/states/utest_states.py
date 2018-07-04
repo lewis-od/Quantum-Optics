@@ -9,6 +9,10 @@ class TestStates(unittest.TestCase):
         # only need to test one of the State subclasses
         self.state = Coherent(1j)
 
+    def testDataReadonly(self):
+        with self.assertRaises(AttributeError):
+            self.state.data = []
+
     def testChangeParameter(self):
         old = list(self.state.data)
         self.state.alpha = 1.0
