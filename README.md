@@ -22,7 +22,10 @@ network. The data is produced as an array of states and an array of labels, such
 |    3   |    Cat     |
 
 After generating some data, run `python network.py` to train and test the
-neural network.
+neural network.   
+Alternatively, to load and test a pre-trained network, run
+`python network.py --restore weights`.   
+Run `python network.py --help` for more information on command-line arguments.
 
 Once the network has been trained, run `tensorboad --logdir=summary` and go to
 the address shown to view a visual summary of the network (accuracy, loss

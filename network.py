@@ -12,10 +12,20 @@ KEEP_PROB = 0.3
 if __name__ == '__main__':
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Train and test the dnn")
-    parser.add_argument('--learning-rate', type=float, required=False,
-        default=0.001, help="Learning rate to used in optimization")
-    parser.add_argument('--keep-prob', type=float, required=False,
-        default=0.3, help="Keep probability to used in dropout training")
+    parser.add_argument('--learning-rate',
+        type=float, required=False,
+        metavar='RATE', default=0.001,
+        help="Learning rate to used in optimization")
+    parser.add_argument('--keep-prob',
+        type=float, required=False,
+        metavar='PROB', default=0.3,
+        help="Keep probability to used in dropout training")
+    parser.add_argument('--restore',
+        required=False, type=str, metavar='DIR',
+        help='Load the saved parameter values from DIR instead of training the network')
+    parser.add_argument('--save',
+        required=False, type=str, metavar='DIR',
+        help='Save the parameter values to DIR after training')
 
     params = parser.parse_args()
 
@@ -203,18 +213,27 @@ def classify(data):
     pred = sess.run(prediction, feed_dict={x: [data]})
     return pred[0]
 
-def save():
+def save(model_dir):
     """Saves the values of weights and biases"""
     saver = tf.train.Saver()
-    model_file = os.path.join(cur_dir, "weights", "model.ckpt")
+    model_file = os.path.join(cur_dir, model_dir, "model.ckpt")
     saver.save(sess, model_file)
 
-def restore():
+def restore(model_dir):
     """Loads the saved model from the weights folder"""
     loader = tf.train.Saver()
-    model_file = os.path.join(cur_dir, "weights", "model.ckpt")
+    model_file = os.path.join(cur_dir, model_dir, "model.ckpt")
     loader.restore(sess, model_file)
 
 if __name__ == '__main__':
-    train()
+    # Restore or train the network depending on command line input
+    if params.restore is not None:
+        restore(params.restore)
+    else:
+        train()
+    # Test the network
     test()
+
+    # Save the parameters of the trained network if requested by user
+    if params.save is not None:
+        save(params.save)
