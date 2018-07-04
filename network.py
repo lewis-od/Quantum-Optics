@@ -1,6 +1,7 @@
 import os
 import shutil
 import argparse
+import json
 import numpy as np
 import tensorflow as tf
 
@@ -214,16 +215,31 @@ def classify(data):
     return pred[0]
 
 def save(model_dir):
-    """Saves the values of weights and biases"""
+    """Saves the values of weights and biases, as well as the hyperparameters"""
+    # Save model data
     saver = tf.train.Saver()
     model_file = os.path.join(cur_dir, model_dir, "model.ckpt")
     saver.save(sess, model_file)
+    # Save hyperparameters
+    hyperparams_file = os.path.join(cur_dir, model_dir, "hyperparameters.json")
+    hyperparams = { 'keep_prob': KEEP_PROB, 'learning_rate': LEARNING_RATE }
+    with open(hyperparams_file, 'w') as f:
+        json.dump(hyperparams, f)
 
 def restore(model_dir):
-    """Loads the saved model from the weights folder"""
+    """Loads the saved model and hyperparameters from the weights folder"""
+    # Load model data
     loader = tf.train.Saver()
     model_file = os.path.join(cur_dir, model_dir, "model.ckpt")
     loader.restore(sess, model_file)
+    # Load hyperparameters
+    hyperparams_file = os.path.join(cur_dir, model_dir, "hyperparameters.json")
+    with open(hyperparams_file, 'r') as f:
+        params = json.load(f)
+    global KEEP_PROB
+    KEEP_PROB = params['keep_prob']
+    global LEARNING_RATE
+    LEARNING_RATE = params['learning_rate']
 
 if __name__ == '__main__':
     # Restore or train the network depending on command line input
