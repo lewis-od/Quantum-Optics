@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 from quoptics.states import Fock
 
 class TestFock(unittest.TestCase):
@@ -7,4 +8,10 @@ class TestFock(unittest.TestCase):
         state = Fock(0)
         with self.assertRaises(ValueError):
             state.n = 0.5
-        
+
+    def testOperator(self):
+        state = Fock(17)
+        old = state.data
+        state.analytic = False
+        self.assertAlmostEqual(max(old), max(state.data))
+        self.assertEqual(np.argmax(old), np.argmax(state.data))
