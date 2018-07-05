@@ -81,10 +81,10 @@ sess = tf.Session()
 ## Define the network graph
 
 with tf.name_scope('input'):
-    x = tf.placeholder(dtype=tf.float32, shape=[None, 200], name='x_input')
+    x = tf.placeholder(dtype=tf.float32, shape=[None, 100], name='x_input')
     y_ = tf.placeholder(dtype=tf.int64, shape=[None], name='y_input')
 
-hidden1 = nn_layer(x, 200, 50, 'layer1')
+hidden1 = nn_layer(x, 100, 50, 'layer1')
 
 with tf.name_scope("droput"):
     keep_prob = tf.placeholder(dtype=tf.float32)

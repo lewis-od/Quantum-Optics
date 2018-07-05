@@ -80,14 +80,14 @@ if __name__ == '__main__':
     # Create argument parser
     parser = argparse.ArgumentParser(description=("Generate data for training "
         "the neural network"))
-    parser.add_argument('--training', type=int, required=False, default=100,
-        help='Number of states to generate for training (default: 100)')
-    parser.add_argument('--test', type=int, required=False, default=25,
-        help='Number of states to generate for testing (default: 25)')
-    parser.add_argument('--validation', type=int, required=False, default=25,
-        help='Number of states to generate for validation (default: 25)')
-    parser.add_argument('--truncation', type=int, required=False, default=50,
-        help='Length of state vectors generated (default: 50)')
+    parser.add_argument('--training', type=int, required=False, default=5000,
+        help='Number of states to generate for training (default: 5000)')
+    parser.add_argument('--test', type=int, required=False, default=2000,
+        help='Number of states to generate for testing (default: 2000)')
+    parser.add_argument('--validation', type=int, required=False, default=2000,
+        help='Number of states to generate for validation (default: 2000)')
+    parser.add_argument('--truncation', type=int, required=False, default=100,
+        help='Length of state vectors generated (default: 100)')
 
     # Parse arguments
     params = parser.parse_args()
