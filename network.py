@@ -212,7 +212,7 @@ def test():
 
 def classify(data):
     """Classifies data using the trained network"""
-    pred = sess.run(prediction, feed_dict={x: [data]})
+    pred = sess.run(prediction, feed_dict={x: [data], keep_prob: 1.0})
     return pred[0]
 
 def save(model_dir):
