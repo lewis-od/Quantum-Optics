@@ -195,7 +195,7 @@ class Cat(Coherent):
             data = alpha + minus_alpha
         else:
             data = alpha - minus_alpha
-        return (1.0/np.sqrt(2)) * data
+        return (1.0/np.sqrt(2*(1 + np.exp(-2*np.abs(alpha)**2)))) * data
 
     def _gen_op(self):
         alpha = _coherent2(self.alpha, self.T)
