@@ -10,8 +10,9 @@ class _State(ABC):
     Base state object
     """
     def __init__(self, analytic=None, T=None, data=None, **kwargs):
-        if analytic is not None and data is not None:
-            raise ValueError("analytic and data kwargs are mutually exclusive")
+        if (analytic is not None or T is not None) and data is not None:
+            raise ValueError(("Too many kwargs provided. Must be either "
+                "(analytic and T) or (data)"))
         elif analytic is not None:
             self._analytic = analytic
         elif data is not None:
@@ -26,6 +27,7 @@ class _State(ABC):
             self._gen_data()
         else:
             self._data = data
+            self._T = len(data)
 
     # Make self.data read-only
     @property
@@ -123,7 +125,7 @@ class Coherent(_State):
     def __init__(self, alpha, analytic=None, T=None, data=None):
         self.type = 'coherent'
         self._alpha = alpha
-        super().__init__(analytic=analytic, T=T, data=data, alpha=alpha)
+        super().__init__(analytic=analytic, data=data, alpha=alpha)
 
     @classmethod
     def from_generic(Cls, generic):
@@ -230,7 +232,7 @@ class Generic(_State):
 
     def __init__(self, data=np.array([])):
         self.type = ''
-        super().__init__(T=len(data), data=data)
+        super().__init__(data=data)
 
     @property
     def data(self):
