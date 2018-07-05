@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from quoptics.states import Generic, Coherent
+from quoptics.states import Generic, Fock, Coherent
 
 class TestGenericState(unittest.TestCase):
 
@@ -9,6 +9,18 @@ class TestGenericState(unittest.TestCase):
         self.assertEqual(state.T, 0)
         state.data = np.array([1, 2, 3, 4, 5])
         self.assertEqual(state.T, 5)
+
+    def testCreateFock(self):
+        n = 5
+        gen = Generic(Fock(n).data)
+        fock = Fock.from_generic(gen)
+        self.assertTrue(np.all(gen.data == fock.data))
+        self.assertEqual(fock.n, n)
+
+        gen = Generic(Fock(n, analytic=False).data)
+        fock = Fock.from_generic(gen)
+        self.assertTrue(np.all(gen.data == fock.data))
+        self.assertEqual(fock.n, n)
 
     def testCreateCoherent(self):
         alpha = 1+1j

@@ -97,6 +97,11 @@ class Fock(_State):
         super().__init__(analytic=analytic, T=T, data=data, n=n)
         self.n = n # Validate n
 
+    @classmethod
+    def from_generic(Cls, gen):
+        n = np.argmax(gen.data)
+        return Cls(n, data=gen.data)
+
     @property
     def n(self):
         return self._n
