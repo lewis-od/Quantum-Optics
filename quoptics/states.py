@@ -164,23 +164,23 @@ class Cat(Coherent):
     :param alpha: Complex number parametrising the state
     :param sign: The sign to use when combining the coherent states ('+' or '-')
     """
-    def __init__(self, alpha, sign='+', analytic=True, T=None):
+    def __init__(self, alpha, parity='+', analytic=True, T=None):
         # Sign needs to be set before call to super, since super.__init__ will
         # call _gen_data, which requires self._sign to be set
-        self._validate_sign(sign)
-        self._sign = '+'
+        self._validate_sign(parity)
+        self._parity = '+'
         super().__init__(alpha, analytic=analytic, T=T, data=None)
         self.type = 'cat'
-        self.params['sign'] = sign
+        self.params['parity'] = parity
 
     @property
-    def sign(self):
-        return self._sign
+    def parity(self):
+        return self._parity
 
-    @sign.setter
-    def sign(self, value):
+    @parity.setter
+    def parity(self, value):
         self._validate_sign(value)
-        self._sign = value
+        self._parity = value
         self._gen_data()
 
     def _validate_sign(self, sign):
@@ -191,7 +191,7 @@ class Cat(Coherent):
         alpha = _coherent1(self.alpha, self.T)
         minus_alpha = _coherent1(-self.alpha, self.T)
         data = None
-        if self.sign == '+':
+        if self.parity == '+':
             data = alpha + minus_alpha
         else:
             data = alpha - minus_alpha
@@ -201,7 +201,7 @@ class Cat(Coherent):
         alpha = _coherent2(self.alpha, self.T)
         minus_alpha = _coherent2(-self.alpha, self.T)
         data = None
-        if self.sign == '+':
+        if self.parity == '+':
             data = alpha + minus_alpha
         else:
             data = alpha - minus_alpha

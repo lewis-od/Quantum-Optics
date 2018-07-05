@@ -18,7 +18,7 @@ class TestCat(unittest.TestCase):
 
     def testChangeSign(self):
         with self.assertRaises(ValueError):
-            self.state.sign = 'a'
+            self.state.parity = 'a'
         old = list(self.state.data)
-        self.state.sign = '-'
+        self.state.parity = '-'
         self.assertNotEqual(old, list(self.state.data))
