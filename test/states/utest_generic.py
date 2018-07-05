@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from quoptics.states import Generic, Fock, Coherent
+from quoptics.states import Generic, Fock, Coherent, Squeezed
 
 class TestGenericState(unittest.TestCase):
 
@@ -33,3 +33,15 @@ class TestGenericState(unittest.TestCase):
         coherent = Coherent.from_generic(gen)
         self.assertAlmostEqual(alpha, coherent.alpha)
         self.assertTrue(np.all(coherent.data == gen.data))
+
+    def testCreateSqueezed(self):
+        z = 1+1j
+        gen = Generic(Squeezed(z).data)
+        squeezed = Squeezed.from_generic(gen)
+        self.assertAlmostEqual(squeezed.z, z)
+        self.assertTrue(np.all(gen.data == squeezed.data))
+
+        gen = Generic(Squeezed(z, T=200, analytic=False).data)
+        squeezed = Squeezed.from_generic(gen)
+        self.assertAlmostEqual(z, squeezed.z)
+        self.assertTrue(np.all(gen.data == squeezed.data))

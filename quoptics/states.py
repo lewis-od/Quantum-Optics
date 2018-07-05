@@ -138,7 +138,7 @@ class Coherent(_State):
         c_1 = generic.data[1]
         mod_alpha = np.sqrt(-2*np.log(c_0))
         alpha = np.exp((mod_alpha**2)/2) * c_1
-        coherent = Cls(alpha, T=generic.T, data=generic.data)
+        coherent = Cls(alpha, data=generic.data)
         return coherent
 
     @property
@@ -216,6 +216,16 @@ class Squeezed(_State):
         self.type = 'squeezed'
         self._z = z
         super().__init__(analytic=analytic, T=T, data=data, z=z)
+
+    @classmethod
+    def from_generic(Cls, gen):
+        c_0 = gen.data[0]
+        c_2 = gen.data[2]
+
+        mod_z = np.arccosh(1.0/(c_0**2))
+        z = c_2/(np.sqrt(2)*c_0) * (-2*mod_z) * (1.0 / np.tanh(mod_z))
+        squeezed = Cls(z, data=gen.data)
+        return squeezed
 
     @property
     def z(self):
