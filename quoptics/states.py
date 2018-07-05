@@ -159,7 +159,7 @@ class Coherent(_State):
 class Cat(Coherent):
     """
     Cat states are a superposition of coherent states given by:
-        |cat> = (1\sqrt(2*(1+exp(-|alpha|^2))))*(|alpha> +/- |-alpha>)
+        |cat> = (1\sqrt(2*(1+exp(-2*|alpha|^2))))*(|alpha> +/- |-alpha>)
     Where |alpha> are coherent states
     :param alpha: Complex number parametrising the state
     :param sign: The sign to use when combining the coherent states ('+' or '-')
@@ -205,7 +205,7 @@ class Cat(Coherent):
             data = alpha + minus_alpha
         else:
             data = alpha - minus_alpha
-        return (1.0/np.sqrt(2*(1 + np.exp(-np.abs(alpha)**2)))) * data
+        return (1.0/np.sqrt(2*(1 + np.exp(-2*np.abs(alpha)**2)))) * data
 
 class Squeezed(_State):
     """
