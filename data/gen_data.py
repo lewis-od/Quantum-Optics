@@ -44,7 +44,7 @@ def gen_states(n):
             states[i] = squeezed.data
         elif type == 'cat':
             # Choose sign of cat state at random
-            cat.parity = ['+', '-'][np.random.randint(2)]
+            cat.theta = np.random.rand() * np.pi * 2
             cat.alpha = rand_complex(1.0)
             states[i] = cat.data
         else:

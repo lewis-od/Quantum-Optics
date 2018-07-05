@@ -159,53 +159,42 @@ class Coherent(_State):
 class Cat(Coherent):
     """
     Cat states are a superposition of coherent states given by:
-        |cat> = (1\sqrt(2*(1+exp(-2*|alpha|^2))))*(|alpha> +/- |-alpha>)
-    Where |alpha> are coherent states
+        |cat> = (1\sqrt(2*(1+cos(theta)*exp(-2*|alpha|^2))))
+            *(|alpha> + e^(i*theta)*|-alpha>)
+    Where |alpha> and |-alpha> are coherent states
     :param alpha: Complex number parametrising the state
-    :param sign: The sign to use when combining the coherent states ('+' or '-')
+    :param theta: Complex number parametrising the state
     """
-    def __init__(self, alpha, parity='+', analytic=True, T=None):
+    def __init__(self, alpha, theta=0, analytic=True, T=None):
         # Sign needs to be set before call to super, since super.__init__ will
         # call _gen_data, which requires self._sign to be set
-        self._validate_sign(parity)
-        self._parity = '+'
+        self._theta = theta
         super().__init__(alpha, analytic=analytic, T=T, data=None)
         self.type = 'cat'
-        self.params['parity'] = parity
+        self.params['theta'] = theta
 
     @property
-    def parity(self):
-        return self._parity
+    def theta(self):
+        return self._theta
 
-    @parity.setter
-    def parity(self, value):
-        self._validate_sign(value)
-        self._parity = value
+    @theta.setter
+    def theta(self, value):
+        self._theta = value
         self._gen_data()
-
-    def _validate_sign(self, sign):
-        if sign not in ['+', '-']:
-            raise ValueError("Sign must be either '+' or '-'.")
 
     def _gen_analytic(self):
         alpha = _coherent1(self.alpha, self.T)
         minus_alpha = _coherent1(-self.alpha, self.T)
-        data = None
-        if self.parity == '+':
-            data = alpha + minus_alpha
-        else:
-            data = alpha - minus_alpha
-        return (1.0/np.sqrt(2*(1 + np.exp(-2*np.abs(self.alpha)**2)))) * data
+        data = alpha + np.exp(1j*self.theta)*minus_alpha
+        N = np.sqrt(2*(1 + np.cos(self.theta)*np.exp(-2*np.abs(self.alpha)**2)))
+        return np.reciprocal(N) * data
 
     def _gen_op(self):
         alpha = _coherent2(self.alpha, self.T)
         minus_alpha = _coherent2(-self.alpha, self.T)
-        data = None
-        if self.parity == '+':
-            data = alpha + minus_alpha
-        else:
-            data = alpha - minus_alpha
-        return (1.0/np.sqrt(2*(1 + np.exp(-2*np.abs(self.alpha)**2)))) * data
+        data = alpha + np.exp(1j*self.theta)*minus_alpha
+        N = np.sqrt(2*(1 + np.cos(self.theta)*np.exp(-2*np.abs(self.alpha)**2)))
+        return np.reciprocal(N) * data
 
 class Squeezed(_State):
     """
