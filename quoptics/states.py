@@ -125,6 +125,15 @@ class Coherent(_State):
         self._alpha = alpha
         super().__init__(analytic=analytic, T=T, data=data, alpha=alpha)
 
+    @classmethod
+    def from_generic(Cls, generic):
+        c_0 = generic.data[0]
+        c_1 = generic.data[1]
+        mod_alpha = np.sqrt(-2*np.log(c_0))
+        alpha = np.exp((mod_alpha**2)/2) * c_1
+        coherent = Cls(alpha, T=generic.T, data=generic.data)
+        return coherent
+
     @property
     def alpha(self):
         return self._alpha
