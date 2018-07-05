@@ -1,1 +1,1 @@
-{"keep_prob": 0.3, "learning_rate": 0.001}
+{"learning_rate": 0.001, "keep_prob": 0.5}
