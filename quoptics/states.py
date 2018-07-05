@@ -9,13 +9,23 @@ class _State(ABC):
     """
     Base state object
     """
-    def __init__(self, analytic=True, T=None, **kwargs):
-        self._analytic = analytic
+    def __init__(self, analytic=None, T=None, data=None, **kwargs):
+        if analytic is not None and data is not None:
+            raise ValueError("analytic and data kwargs are mutually exclusive")
+        elif analytic is not None:
+            self._analytic = analytic
+        elif data is not None:
+            self._analytic = False
+        else: # Neither analytic nor data keyords provided, default to analytic
+            self._analytic = True
         self._T = conf.T if T is None else T
         self._data = np.empty(self.T)
         self.params = kwargs
         super().__init__()
-        self._gen_data()
+        if data is None:
+            self._gen_data()
+        else:
+            self._data = data
 
     # Make self.data read-only
     @property
@@ -79,10 +89,10 @@ class Fock(_State):
     Basis number states
     :param n: Number of the Fock state
     """
-    def __init__(self, n, analytic=True, T=None):
+    def __init__(self, n, analytic=None, T=None, data=None):
         self.type = 'fock'
         self._n = 0
-        super().__init__(analytic=analytic, T=T, n=n)
+        super().__init__(analytic=analytic, T=T, data=data, n=n)
         self.n = n # Validate n
 
     @property
@@ -110,10 +120,10 @@ class Coherent(_State):
     Coherent states from analytic expression in Fock basis
     :param alpha: Complex number parametrising the coherent state
     """
-    def __init__(self, alpha, analytic=True, T=None):
+    def __init__(self, alpha, analytic=None, T=None, data=None):
         self.type = 'coherent'
         self._alpha = alpha
-        super().__init__(analytic=analytic, T=T, alpha=alpha)
+        super().__init__(analytic=analytic, T=T, data=data, alpha=alpha)
 
     @property
     def alpha(self):
@@ -143,7 +153,7 @@ class Cat(Coherent):
         # call _gen_data, which requires self._sign to be set
         self._validate_sign(sign)
         self._sign = '+'
-        super().__init__(alpha, analytic=analytic, T=T)
+        super().__init__(alpha, analytic=analytic, T=T, data=None)
         self.type = 'cat'
         self.params['sign'] = sign
 
@@ -186,10 +196,10 @@ class Squeezed(_State):
     Squeezed states (single-mode) from analytic expression in Fock basis
     :param z: Complex number that parametrises the squeezed state
     """
-    def __init__(self, z, analytic=True, T=None):
+    def __init__(self, z, analytic=None, T=None, data=None):
         self.type = 'squeezed'
         self._z = z
-        super().__init__(analytic=analytic, T=T, z=z)
+        super().__init__(analytic=analytic, T=T, data=data, z=z)
 
     @property
     def z(self):
@@ -210,8 +220,8 @@ class Squeezed(_State):
 class Generic(_State):
 
     def __init__(self, data=np.array([])):
-        super().__init__(analytic=False, T=len(data))
-        self.data = data
+        self.type = ''
+        super().__init__(T=len(data), data=data)
 
     @property
     def data(self):
