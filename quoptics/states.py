@@ -206,6 +206,28 @@ class Squeezed(_State):
     def _gen_op(self):
         return _squeezed2(self.z, self.T)
 
+
+class Generic(_State):
+
+    def __init__(self, data=np.array([])):
+        super().__init__(analytic=False, T=len(data))
+        self.data = data
+
+    @property
+    def data(self):
+        return self._data
+
+    @data.setter
+    def data(self, value):
+        self.T = len(value)
+        self._data = value
+
+    def _gen_analytic(self):
+        pass
+
+    def _gen_op(self):
+        pass
+
 ## Helper methods for generating state data
 def _fock(n, T):
     data = np.zeros(T)
