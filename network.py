@@ -9,18 +9,20 @@ import tensorflow as tf
 
 LEARNING_RATE = 0.001
 KEEP_PROB = 0.3
+N_EPOCHS = 500
 
 if __name__ == '__main__':
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Train and test the dnn")
     parser.add_argument('--learning-rate',
-        type=float, required=False,
-        metavar='RATE', default=0.001,
+        type=float, required=False, metavar='RATE', default=0.001,
         help="Learning rate to used in optimization")
     parser.add_argument('--keep-prob',
-        type=float, required=False,
-        metavar='PROB', default=0.3,
+        type=float, required=False, metavar='PROB', default=0.3,
         help="Keep probability to used in dropout training")
+    parser.add_argument('--epochs',
+        type=int, required=False, metavar='N_EPOCHS', default=500,
+        help="Number of training epochs to run")
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--restore',
         required=False, type=str, metavar='DIR',
@@ -34,6 +36,7 @@ if __name__ == '__main__':
     # Set values of hyperparameters to those supplied on the command line
     KEEP_PROB = params.keep_prob
     LEARNING_RATE = params.learning_rate
+    N_EPOCHS = params.epochs
 
 ## Helper functions for creating network
 
@@ -161,7 +164,7 @@ def train():
     test_writer = tf.summary.FileWriter(
         os.path.join(summary_dir, "test"))
 
-    for epoch in range(500):
+    for epoch in range(N_EPOCHS):
         if epoch % 10 == 0:
             # Evaluate network performance every 10 epochs
             summary, acc = sess.run([merged_summs, accuracy],
@@ -207,6 +210,7 @@ def test():
     print("Hyperparameters:")
     print("    Learning rate: {}".format(LEARNING_RATE))
     print("    Keep probability: {}".format(KEEP_PROB))
+    print("    Training epochs: {}".format(N_EPOCHS))
     print("Confusion matrix:")
     print(conf_mat)
 
@@ -223,7 +227,8 @@ def save(model_dir):
     saver.save(sess, model_file)
     # Save hyperparameters
     hyperparams_file = os.path.join(cur_dir, model_dir, "hyperparameters.json")
-    hyperparams = { 'keep_prob': KEEP_PROB, 'learning_rate': LEARNING_RATE }
+    hyperparams = { 'keep_prob': KEEP_PROB, 'learning_rate': LEARNING_RATE,
+        'epochs': N_EPOCHS }
     with open(hyperparams_file, 'w') as f:
         json.dump(hyperparams, f)
 
@@ -241,6 +246,8 @@ def restore(model_dir):
     KEEP_PROB = params['keep_prob']
     global LEARNING_RATE
     LEARNING_RATE = params['learning_rate']
+    global N_EPOCHS
+    N_EPOCHS = params['epochs']
 
 if __name__ == '__main__':
     # Restore or train the network depending on command line input
