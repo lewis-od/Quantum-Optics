@@ -5,9 +5,7 @@ import json
 import numpy as np
 import tensorflow as tf
 
-
 class NeuralNetwork(object):
-
     def __init__(self, sess, learning_rate=0.001, keep_prob=0.3,
         summary_dir="summary", data_dir="data", train_file="train.npz",
         test_file="test.npz"):
@@ -29,7 +27,6 @@ class NeuralNetwork(object):
             self.data_dir = os.path.join(cur_dir, data_dir)
         self.train_file = train_file
         self.test_file = test_file
-
         # Operations
         self.x_input = None
         self.y_input = None
@@ -41,7 +38,7 @@ class NeuralNetwork(object):
         self.prediction = None
         self.correct_pred = None
         self.summaries = None
-
+        # Create and initialise the tensorflow computation graph
         self._create_graph()
         self.sess.run(tf.global_variables_initializer())
 
@@ -115,7 +112,8 @@ class NeuralNetwork(object):
         # Train using the ADAM optimiser
         with tf.name_scope('train'):
             self.train_op = tf.train.AdamOptimizer(
-                learning_rate=self.learning_rate_input).minimize(self.cross_entropy)
+                learning_rate=self.learning_rate_input
+            ).minimize(self.cross_entropy)
 
         # Calculate the accuracy of the network
         with tf.name_scope('accuracy'):
@@ -289,21 +287,24 @@ if __name__ == '__main__':
     group.add_argument('--save',
         required=False, type=str, metavar='DIR',
         help='Save the parameter values to DIR after training')
-
     params = parser.parse_args()
 
+    # Initialise and run the neural net based on the commands supplied
     net = None
     sess = tf.Session()
     if params.restore is not None:
+        # Restore a pre-trained network
         net = NeuralNetwork(sess)
         net.restore(params.restore)
     else:
+        # Create and train a network
         net = NeuralNetwork(sess,
             learning_rate=params.learning_rate,
             keep_prob=params.keep_prob)
         net.train(params.epochs)
 
         if params.save is not None:
+            # Save the trained network
             net.save(params.save)
-
+    # Run the network against the test data and print various metrics
     net.test()
