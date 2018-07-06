@@ -130,7 +130,7 @@ class Coherent(_State):
     def __init__(self, alpha, analytic=None, T=None, data=None):
         self.type = 'coherent'
         self._alpha = alpha
-        super().__init__(analytic=analytic, data=data, alpha=alpha)
+        super().__init__(analytic=analytic, T=T, data=data, alpha=alpha)
 
     @classmethod
     def from_generic(Cls, generic):
