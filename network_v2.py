@@ -34,6 +34,7 @@ class NeuralNetwork(object):
         self.x_input = None
         self.y_input = None
         self.keep_prob_input = None
+        self.learning_rate_input = None
         self.cross_entropy = None
         self.accuracy = None
         self.train_op = None
@@ -90,12 +91,14 @@ class NeuralNetwork(object):
                 name='x_input')
             self.y_input = tf.placeholder(dtype=tf.int64, shape=[None],
                 name='y_input')
+            self.learning_rate_input = tf.placeholder(dtype=tf.float32,
+                name='learning_rate')
+            self.keep_prob_input = tf.placeholder(dtype=tf.float32,
+                name='dropout_keep_probability')
 
         hidden1 = self._nn_layer(self.x_input, 100, 50, 'layer1')
 
         with tf.name_scope("droput"):
-            self.keep_prob_input = tf.placeholder(dtype=tf.float32)
-            tf.summary.scalar('dropout_keep_probability', self.keep_prob_input)
             dropped = tf.nn.dropout(hidden1, self.keep_prob_input)
 
         hidden2 = self._nn_layer(dropped, 50, 25, 'layer2')
@@ -112,7 +115,7 @@ class NeuralNetwork(object):
         # Train using the ADAM optimiser
         with tf.name_scope('train'):
             self.train_op = tf.train.AdamOptimizer(
-                learning_rate=self.learning_rate).minimize(self.cross_entropy)
+                learning_rate=self.learning_rate_input).minimize(self.cross_entropy)
 
         # Calculate the accuracy of the network
         with tf.name_scope('accuracy'):
@@ -181,7 +184,8 @@ class NeuralNetwork(object):
                             feed_dict={
                                 self.x_input: batch[0],
                                 self.y_input: batch[1],
-                                self.keep_prob_input: self.keep_prob
+                                self.keep_prob_input: self.keep_prob,
+                                self.learning_rate_input: self.learning_rate
                             },
                             run_metadata=run_metadata)
                         train_writer.add_run_metadata(
@@ -193,7 +197,8 @@ class NeuralNetwork(object):
                             feed_dict={
                                 self.x_input: batch[0],
                                 self.y_input: batch[1],
-                                self.keep_prob_input: self.keep_prob
+                                self.keep_prob_input: self.keep_prob,
+                                self.learning_rate_input: self.learning_rate
                             })
                         train_writer.add_summary(summary, epoch)
         train_writer.close()
