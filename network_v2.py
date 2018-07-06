@@ -200,3 +200,26 @@ class NeuralNetwork(object):
         test_writer.close()
         print("Training completed.")
         print('-'*80)
+
+    def test(self):
+        """Tests the network and prints out various statistics"""
+        # Load test data
+        test_states, test_labels = self.load_data(self.test_file)
+        # Test the network
+        test_predictions, acc = self.sess.run([self.prediction, self.accuracy],
+            feed_dict={
+                self.x_input: test_states,
+                self.y_input: test_labels,
+                self.keep_prob_input: 1.0
+            })
+        n_correct = np.sum(test_predictions == test_labels)
+        conf_mat = self.sess.run(
+            tf.confusion_matrix(test_labels, test_predictions))
+        # Print the accuracy and confusion matrix
+        print("Network classifed {}/{} states correctly ({:.2f}%)".format(
+            n_correct, len(test_labels), acc*100))
+        print("Hyperparameters:")
+        print("    Learning rate: {}".format(self.learning_rate))
+        print("    Keep probability: {}".format(self.keep_prob))
+        print("Confusion matrix:")
+        print(conf_mat)
