@@ -248,3 +248,19 @@ class NeuralNetwork(object):
         }
         with open(hyperparams_file, 'w') as f:
             json.dump(hyperparams, f)
+
+    def restore(self, model_dir):
+        """Loads the saved model and hyperparameters from the weights folder"""
+        # Load model data
+        loader = tf.train.Saver()
+        cur_dir = os.path.abspath(os.path.join(__file__, os.pardir))
+        model_file = os.path.join(cur_dir, model_dir, "model.ckpt")
+        loader.restore(self.sess, model_file)
+
+        hyperparams_file = os.path.join(
+            cur_dir, model_dir, "hyperparameters.json")
+        # Load hyperparameters
+        with open(hyperparams_file, 'r') as f:
+            params = json.load(f)
+        self.keep_prob= params['keep_prob']
+        self.learning_rate = params['learning_rate']
