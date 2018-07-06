@@ -223,3 +223,12 @@ class NeuralNetwork(object):
         print("    Keep probability: {}".format(self.keep_prob))
         print("Confusion matrix:")
         print(conf_mat)
+
+    def classify(self, data):
+        """Classifies data using the trained network"""
+        pred = self.sess.run(self.prediction,
+            feed_dict={
+                self.x_input: [data],
+                self.keep_prob_input: 1.0
+            })
+        return pred[0]
