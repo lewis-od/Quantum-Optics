@@ -12,7 +12,7 @@ net = py.network.NeuralNetwork(sess);
 % Load the pre-trained network
 net.restore("weights");
 
-% Run the network agains the test data and print the results
+% Run the network against the test data and print the results
 net.test()
 
 % Clean up
