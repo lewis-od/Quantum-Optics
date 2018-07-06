@@ -232,3 +232,19 @@ class NeuralNetwork(object):
                 self.keep_prob_input: 1.0
             })
         return pred[0]
+
+    def save(self, model_dir):
+        """Saves the values of weights and biases, as well as the hyperparameters"""
+        # Save model data
+        saver = tf.train.Saver()
+        cur_dir = os.path.abspath(os.path.join(__file__, os.pardir))
+        model_file = os.path.join(cur_dir, model_dir, "model.ckpt")
+        saver.save(self.sess, model_file)
+        # Save hyperparameters
+        hyperparams_file = os.path.join(cur_dir, model_dir, "hyperparameters.json")
+        hyperparams = {
+            'keep_prob': self.keep_prob,
+            'learning_rate': self.learning_rate,
+        }
+        with open(hyperparams_file, 'w') as f:
+            json.dump(hyperparams, f)
