@@ -127,6 +127,12 @@ class NeuralNetwork(object):
 
         self.summaries = tf.summary.merge_all()
 
+    def _fetch_batch(self, data, labels, n, b_size):
+        """Returns the nth batch of size b_size from data and labels"""
+        batch_data = data[n*b_size:(n+1)*b_size]
+        batch_labels = labels[n*b_size:(n+1)*b_size]
+        return batch_data, batch_labels
+
     def load_data(self, name):
         """Loads a .npz file from the data directory"""
         if name.split('.')[-1] != 'npz':
@@ -140,12 +146,6 @@ class NeuralNetwork(object):
         states = np.abs(states)
         states[np.isnan(states)] = 0.0
         return states, labels
-
-    def fetch_batch(self, data, labels, n, b_size):
-        """Returns the nth batch of size b_size from data and labels"""
-        batch_data = data[n*b_size:(n+1)*b_size]
-        batch_labels = labels[n*b_size:(n+1)*b_size]
-        return batch_data, batch_labels
 
     def train(self, n_epochs):
         """Trains the network and tests its accuracy"""
@@ -173,7 +173,7 @@ class NeuralNetwork(object):
             else:
                 # TODO: More elegant batch training
                 for b_n in range(5):
-                    batch = self.fetch_batch(
+                    batch = self._fetch_batch(
                         train_states, train_labels, b_n, 1000)
                     if epoch % 100 == 99 and b_n == 1:
                         run_metadata = tf.RunMetadata()
