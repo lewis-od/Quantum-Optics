@@ -31,9 +31,9 @@ class NeuralNetwork(object):
         self.test_file = test_file
 
         # Operations
-        self.x = None
-        self.y_ = None
-        self.keep_prob_node = None
+        self.x_input = None
+        self.y_input = None
+        self.keep_prob_input = None
         self.cross_entropy = None
         self.accuracy = None
         self.train_op = None
@@ -84,17 +84,19 @@ class NeuralNetwork(object):
             return activations
 
     def _create_graph(self):
+        """Creates the neural network computaion graph"""
         with tf.name_scope('input'):
-            self.x = tf.placeholder(dtype=tf.float32, shape=[None, 100],
+            self.x_input = tf.placeholder(dtype=tf.float32, shape=[None, 100],
                 name='x_input')
-            self.y_ = tf.placeholder(dtype=tf.int64, shape=[None], name='y_input')
+            self.y_input = tf.placeholder(dtype=tf.int64, shape=[None],
+                name='y_input')
 
-        hidden1 = self._nn_layer(self.x, 100, 50, 'layer1')
+        hidden1 = self._nn_layer(self.x_input, 100, 50, 'layer1')
 
         with tf.name_scope("droput"):
-            self.keep_prob_node = tf.placeholder(dtype=tf.float32)
-            tf.summary.scalar('dropout_keep_probability', self.keep_prob_node)
-            dropped = tf.nn.dropout(hidden1, self.keep_prob_node)
+            self.keep_prob_input = tf.placeholder(dtype=tf.float32)
+            tf.summary.scalar('dropout_keep_probability', self.keep_prob_input)
+            dropped = tf.nn.dropout(hidden1, self.keep_prob_input)
 
         hidden2 = self._nn_layer(dropped, 50, 25, 'layer2')
         # Don't apply softmax activation yet, it's applied automatically when
@@ -104,7 +106,7 @@ class NeuralNetwork(object):
         # Use cross entropy loss function
         with tf.name_scope('cross_entropy'):
             self.cross_entropy = tf.losses.sparse_softmax_cross_entropy(
-                labels=self.y_, logits=y)
+                labels=self.y_input, logits=y)
         tf.summary.scalar('cross_entropy', self.cross_entropy)
 
         # Train using the ADAM optimiser
@@ -116,7 +118,7 @@ class NeuralNetwork(object):
         with tf.name_scope('accuracy'):
             with tf.name_scope('correct_prediction'):
                 self.prediction = tf.argmax(y, 1)
-                self.correct_pred = tf.equal(self.prediction, self.y_)
+                self.correct_pred = tf.equal(self.prediction, self.y_input)
             with tf.name_scope('accuracy'):
                 self.accuracy = tf.reduce_mean(
                     tf.cast(self.correct_pred, tf.float32))
@@ -124,11 +126,11 @@ class NeuralNetwork(object):
 
         self.summaries = tf.summary.merge_all()
 
-    def load_data(self, dir, name):
+    def load_data(self, name):
         """Loads a .npz file from the data directory"""
         if name.split('.')[-1] != 'npz':
             name += '.npz'
-        f = os.path.join(dir, name)
+        f = os.path.join(self.data_dir, name)
         # Load the data from the file
         d = np.load(f)
         states = d['states']
@@ -147,8 +149,8 @@ class NeuralNetwork(object):
     def train(self, n_epochs):
         """Trains the network and tests its accuracy"""
         # Load training and test data
-        train_states, train_labels = self.load_data(self.data_dir, self.train_file)
-        test_states, test_labels = self.load_data(self.data_dir, self.test_file)
+        train_states, train_labels = self.load_data(self.train_file)
+        test_states, test_labels = self.load_data(self.test_file)
         # Directory to save variable summaries to
         if os.path.isdir(self.summary_dir): shutil.rmtree(self.summary_dir)
         # These write the network data for visualization later in tensorboard
@@ -161,26 +163,38 @@ class NeuralNetwork(object):
             if epoch % 10 == 0:
                 # Evaluate network performance every 10 epochs
                 summary, acc = self.sess.run([self.summaries, self.accuracy],
-                    feed_dict={ self.x: test_states,
-                                self.y_: test_labels,
-                                self.keep_prob_node: 1.0
+                    feed_dict={ self.x_input: test_states,
+                                self.y_input: test_labels,
+                                self.keep_prob_input: 1.0
                 })
                 test_writer.add_summary(summary, epoch)
                 print("Accuracy at step {} is : {}".format(epoch, acc))
             else:
                 # TODO: More elegant batch training
                 for b_n in range(5):
-                    batch = self.fetch_batch(train_states, train_labels, b_n, 1000)
+                    batch = self.fetch_batch(
+                        train_states, train_labels, b_n, 1000)
                     if epoch % 100 == 99 and b_n == 1:
                         run_metadata = tf.RunMetadata()
-                        summary, _ = self.sess.run([self.summaries, self.train_op],
-                            feed_dict={self.x: batch[0], self.y_: batch[1], self.keep_prob_node: self.keep_prob},
+                        summary, _ = self.sess.run(
+                            [self.summaries, self.train_op],
+                            feed_dict={
+                                self.x_input: batch[0],
+                                self.y_input: batch[1],
+                                self.keep_prob_input: self.keep_prob
+                            },
                             run_metadata=run_metadata)
-                        train_writer.add_run_metadata(run_metadata, 'step%03d-%01d' % (epoch, b_n))
+                        train_writer.add_run_metadata(
+                            run_metadata, 'step%03d-%01d' % (epoch, b_n))
                         train_writer.add_summary(summary, epoch)
                     else:
-                        summary, _ = self.sess.run([self.summaries, self.train_op],
-                            feed_dict={self.x: batch[0], self.y_: batch[1], self.keep_prob_node: self.keep_prob})
+                        summary, _ = self.sess.run(
+                            [self.summaries, self.train_op],
+                            feed_dict={
+                                self.x_input: batch[0],
+                                self.y_input: batch[1],
+                                self.keep_prob_input: self.keep_prob
+                            })
                         train_writer.add_summary(summary, epoch)
         train_writer.close()
         test_writer.close()
