@@ -11,6 +11,7 @@ class NeuralNetwork(object):
         test_file="test.npz"):
         self.sess = sess # tensorflow session
         # Network hyperparameters
+        self.hyperparameters = []
         self.learning_rate = learning_rate
         self.keep_prob = keep_prob
         # Current directory
@@ -201,6 +202,11 @@ class NeuralNetwork(object):
                         train_writer.add_summary(summary, epoch)
         train_writer.close()
         test_writer.close()
+        self.hyperparameters.append({
+            'learning_rate': self.learning_rate,
+            'keep_prob': self.keep_prob,
+            'epochs': n_epochs
+        })
         print("Training completed.")
         print('-'*80)
 
@@ -221,9 +227,13 @@ class NeuralNetwork(object):
         # Print the accuracy and confusion matrix
         print("Network classifed {}/{} states correctly ({:.2f}%)".format(
             n_correct, len(test_labels), acc*100))
-        print("Hyperparameters:")
-        print("    Learning rate: {}".format(self.learning_rate))
-        print("    Keep probability: {}".format(self.keep_prob))
+        print("Training Hyperparameters:")
+        for run in range(len(self.hyperparameters)):
+            print("    Run {}".format(run+1))
+            params = self.hyperparameters[run]
+            print("        Learning rate: {}".format(params['learning_rate']))
+            print("        Keep probability: {}".format(params['keep_prob']))
+            print("        Epochs: {}".format(params['epochs']))
         print("Confusion matrix:")
         print(conf_mat)
 
@@ -245,12 +255,8 @@ class NeuralNetwork(object):
         saver.save(self.sess, model_file)
         # Save hyperparameters
         hyperparams_file = os.path.join(cur_dir, model_dir, "hyperparameters.json")
-        hyperparams = {
-            'keep_prob': self.keep_prob,
-            'learning_rate': self.learning_rate,
-        }
         with open(hyperparams_file, 'w') as f:
-            json.dump(hyperparams, f)
+            json.dump(self.hyperparameters, f)
 
     def restore(self, model_dir):
         """Loads the saved model and hyperparameters from the weights folder"""
@@ -265,8 +271,9 @@ class NeuralNetwork(object):
         # Load hyperparameters
         with open(hyperparams_file, 'r') as f:
             params = json.load(f)
-        self.keep_prob= params['keep_prob']
-        self.learning_rate = params['learning_rate']
+        self.hyperparameters = params
+        self.keep_prob = params[-1]['keep_prob']
+        self.learning_rate = params[-1]['learning_rate']
 
 if __name__ == '__main__':
     # Parse command line arguments
