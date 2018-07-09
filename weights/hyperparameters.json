@@ -1,1 +1,1 @@
-[{"learning_rate": 0.0005, "keep_prob": 0.8, "epochs": 1000}]
+[{"learning_rate": 0.001, "keep_prob": 0.3, "epochs": 500}, {"learning_rate": 0.0005, "keep_prob": 0.3, "epochs": 1000}, {"learning_rate": 0.0005, "keep_prob": 0.8, "epochs": 500}]

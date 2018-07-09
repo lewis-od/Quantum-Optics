@@ -250,7 +250,10 @@ class NeuralNetwork(object):
         """Saves the values of weights and biases, as well as the hyperparameters"""
         # Save model data
         saver = tf.train.Saver()
-        cur_dir = os.path.abspath(os.path.join(__file__, os.pardir))
+        try:
+            cur_dir = os.path.abspath(os.path.join(__file__, os.pardir))
+        except:
+            cur_dir = os.path.abspath(".")
         model_file = os.path.join(cur_dir, model_dir, "model.ckpt")
         saver.save(self.sess, model_file)
         # Save hyperparameters

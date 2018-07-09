@@ -6,8 +6,9 @@ parent = os.path.abspath(os.path.join(directory, os.pardir))
 sys.path.append(parent)
 
 import argparse
+from qutip.states import basis, coherent
+from quoptics.states import cat, squeezed
 import numpy as np
-import quoptics as qo
 
 def rand_complex(modulus):
     """Generates a random complex number with |z| < modulus"""
@@ -20,13 +21,10 @@ def gen_states(n):
     """Generates n random states"""
     # Types of state
     types = ['fock', 'coherent', 'squeezed', 'cat']
-    fock = qo.states.Fock(0)
-    coherent = qo.states.Coherent(0)
-    squeezed = qo.states.Squeezed(0)
-    cat = qo.states.Cat(0)
     # Array to hold all generated states
-    states = np.zeros([n, qo.conf.T], dtype=np.complex64)
+    states = np.zeros([n, T], dtype=np.complex64)
     labels = np.zeros(n)
+    state = None
     for i in range(n):
         # Cycle through the types of state
         id = i % len(types) # Integer identifying type of state
@@ -34,21 +32,23 @@ def gen_states(n):
         type = types[id]
         # Generate the state
         if type == 'fock':
-            fock.n = np.random.randint(0, qo.conf.T)
-            states[i] = fock.data
+            n_photons = np.random.randint(0, T)
+            state = basis(T, n_photons)
         elif type == 'coherent':
-            coherent.alpha = rand_complex(1.0)
-            states[i] = coherent.data
+            alpha = rand_complex(1.0)
+            state = coherent(T, alpha)
         elif type == 'squeezed':
-            squeezed.z = rand_complex(1.0)
-            states[i] = squeezed.data
+            z = rand_complex(1.0)
+            state = squeezed(T, z)
         elif type == 'cat':
             # Choose sign of cat state at random
-            cat.theta = np.random.rand() * np.pi * 2
-            cat.alpha = rand_complex(1.0)
-            states[i] = cat.data
+            theta = np.random.rand() * np.pi * 2
+            alpha = rand_complex(1.0)
+            state = cat(T, alpha, theta)
         else:
             raise ValueError("Invalid type supplied")
+        # Convert column vector to row vector
+        states[i] = state.data.toarray().T[0]
 
     return (states, labels)
 
@@ -92,8 +92,8 @@ if __name__ == '__main__':
     # Parse arguments
     params = parser.parse_args()
 
-    # Set module-wide truncation
-    qo.conf.T = params.truncation
+    # Set truncation
+    T = params.truncation
 
     print("Generating data with params {}".format(params.__dict__))
 
