@@ -1,2 +1,4 @@
+.DS_Store
 *.pyc
 summary
+image_data/training
