@@ -5,6 +5,8 @@ import numpy as np
 import qutip as qu
 import matplotlib.pyplot as plt
 
+VERBOSE = False
+
 def rand_complex(modulus):
     r = np.random.rand() * modulus
     theta = np.random.rand() * 2 * np.pi
@@ -49,6 +51,8 @@ def gen_wigner(n, T, xvec):
         data = qu.wigner(state, xvec, xvec)
         wigners[i] = data
         labels[i] = label
+        if VERBOSE:
+            print("Wigner function number {} calculated.".format(i))
 
     return wigners, labels, params
 
@@ -78,6 +82,8 @@ def save_data(folder, wigners, xvec, labels, params, imsize, dpi):
         fname = "wigner_{}.png".format(n)
         path = os.path.join(img_dir, fname)
         plt.savefig(path, bbox_inches=0.0, dpi=dpi)
+        if VERBOSE:
+            print("Image {} saved.".format(n))
     # Save the labels as a numpy array
     np.save(os.path.join(img_dir, "labels"), labels)
     # Save the actual Wigner function values, the axis values, and the value
@@ -100,8 +106,12 @@ if __name__ == '__main__':
     parser.add_argument('--dpi', type=int, required=False, default=192,
         help=("The DPI of your monitor (if not correct, images will be the "
         "wrong size)"))
+    parser.add_argument('--verbose', required=False, default=False,
+        action='store_true',
+        help="Print progress information as the script runs")
 
     clas = parser.parse_args()
+    VERBOSE = clas.verbose
 
     xvec = np.linspace(-clas.xlim, clas.xlim, 200)
     data, labels, params = gen_wigner(clas.training, clas.truncation, xvec)
