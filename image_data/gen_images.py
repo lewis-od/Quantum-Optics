@@ -52,7 +52,7 @@ def gen_wigner(n, T, xvec):
 
     return wigners, labels, params
 
-def save_data(folder, wigners, xvec, labels, params):
+def save_data(folder, wigners, xvec, labels, params, imsize, dpi):
     # Remove folder if it exists
     try:
         cur_dir = os.path.abspath(os.path.join(__file__, os.pardir))
@@ -64,42 +64,45 @@ def save_data(folder, wigners, xvec, labels, params):
     # Create the folder
     os.makedirs(img_dir)
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(imsize/dpi, imsize/dpi), dpi=dpi)
+    # fig = plt.figure()
+    ax = plt.axes([0,0,1,1])
+    plt.axis('off')
     for n in range(len(wigners)):
         data = wigners[n]
         # Plot the Wigner function
         w_map = qu.wigner_cmap(data)
-        plt.contourf(xvec, xvec, data, 200, cmap=w_map)
-        type = ['fock', 'coherent', 'squeezed', 'cat'][int(labels[n])]
-        param = params[n]
-
-        if type == 'fock':
-            param_str = "n={0.real:.0f}".format(param)
-        elif type == 'coherent' or type == 'cat':
-            param_str = "alpha={:.2f}".format(param)
-        elif type == 'squeezed':
-            param_str = "z={:.2f}".format(param)
-
-        plt.title("{} state with {}".format(type, param_str))
+        plt.imshow(data, cmap=w_map, interpolation='bilinear', aspect='equal')
 
         # Save the image
         fname = "wigner_{}.png".format(n)
         path = os.path.join(img_dir, fname)
-        plt.savefig(path)
+        plt.savefig(path, bbox_inches=0.0, dpi=dpi)
+    # Save the labels as a numpy array
     np.save(os.path.join(img_dir, "labels"), labels)
+    # Save the actual Wigner function values, the axis values, and the value
+    # of the parameter (e.g n, z, alpha, etc) of each state
+    np.savez(os.path.join(img_dir, "raw"),
+        data=wigners, params=params, axes=xvec)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Generate images of the Wigner function of states")
     parser.add_argument('--training', type=int, required=False, default=10,
-        help="Number of images to generate for the training dataset")
+        help="Number of images to generate for the training dataset",
+        metavar='NUM')
     parser.add_argument('--xlim', type=float, required=False, default=5,
         help="Max/min value to plot the Wigner function for")
     parser.add_argument('--truncation', type=int, required=False, default=40,
-        help="The truncation to use when calculating the states")
+        help="The truncation to use when calculating the states", metavar='T')
+    parser.add_argument('--imsize', type=int, required=False, default=400,
+        help="The size of the images to generate (in pixels)", metavar='SIZE')
+    parser.add_argument('--dpi', type=int, required=False, default=192,
+        help=("The DPI of your monitor (if not correct, images will be the "
+        "wrong size)"))
 
     clas = parser.parse_args()
 
     xvec = np.linspace(-clas.xlim, clas.xlim, 200)
     data, labels, params = gen_wigner(clas.training, clas.truncation, xvec)
-    save_data("training", data, xvec, labels, params)
+    save_data("training", data, xvec, labels, params, clas.imsize, clas.dpi)
