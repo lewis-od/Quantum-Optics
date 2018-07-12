@@ -1,4 +1,5 @@
 .DS_Store
 *.pyc
 summary
+cnn_summary
 image_data/training
