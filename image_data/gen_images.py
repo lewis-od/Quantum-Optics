@@ -99,9 +99,9 @@ if __name__ == '__main__':
         metavar='NUM')
     parser.add_argument('--xlim', type=float, required=False, default=5,
         help="Max/min value to plot the Wigner function for")
-    parser.add_argument('--truncation', type=int, required=False, default=40,
+    parser.add_argument('--truncation', type=int, required=False, default=80,
         help="The truncation to use when calculating the states", metavar='T')
-    parser.add_argument('--imsize', type=int, required=False, default=400,
+    parser.add_argument('--imsize', type=int, required=False, default=200,
         help="The size of the images to generate (in pixels)", metavar='SIZE')
     parser.add_argument('--dpi', type=int, required=False, default=192,
         help=("The DPI of your monitor (if not correct, images will be the "
