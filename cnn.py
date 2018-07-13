@@ -5,32 +5,32 @@ import numpy as np
 import tensorflow as tf
 
 def cnn_model_fn(features, labels, mode):
-    input_layer = tf.reshape(features["x"], [-1, 400, 400, 1])
+    input_layer = tf.reshape(features["x"], [-1, 200, 200, 1])
 
     conv1 = tf.layers.conv2d(inputs=input_layer, filters=32, kernel_size=[5, 5],
         padding="same", activation=tf.nn.relu)
 
-    # Output of pool1 has shape [batch_size, 200, 200, 32]
+    # Output of pool1 has shape [batch_size, 100, 100, 32]
     pool1 = tf.layers.max_pooling2d(inputs=conv1, pool_size=[2, 2], strides=2)
 
     conv2 = tf.layers.conv2d(inputs=pool1, filters=64, kernel_size=[5, 5],
         padding="same", activation=tf.nn.relu)
 
-    # Output of pool2 has shape [batch_size, 100, 100, 64]
+    # Output of pool2 has shape [batch_size, 50, 50, 64]
     pool2 = tf.layers.max_pooling2d(inputs=conv2, pool_size=[2, 2], strides=2)
 
     conv3 = tf.layers.conv2d(inputs=pool2, filters=64, kernel_size=[10, 10],
         padding="same", activation=tf.nn.relu)
 
     # Output of pool 3 has shape [batch_size, 10, 10, 64]
-    pool3 = tf.layers.max_pooling2d(inputs=conv3, pool_size=[10,10], strides=10)
+    pool3 = tf.layers.max_pooling2d(inputs=conv3, pool_size=[5, 5], strides=5)
 
     pool3_flat = tf.reshape(pool3, [-1, 10*10*64])
     dense = tf.layers.dense(pool3_flat, 1024, activation=tf.nn.relu)
-    # dropout = tf.layers.dropout(inputs=dense, rate=0.4,
-    #     training=(mode == tf.estimator.ModeKeys.TRAIN))
+    dropout = tf.layers.dropout(inputs=dense, rate=0.4,
+        training=(mode == tf.estimator.ModeKeys.TRAIN))
 
-    logits = tf.layers.dense(dense, 4)
+    logits = tf.layers.dense(dropout, 4)
 
     predictions = {
         "classes": tf.argmax(input=logits, axis=1),
@@ -63,10 +63,10 @@ if __name__ == '__main__':
     # Load training images
     image_path = os.path.join(image_dir, "wigner_*.png")
     file_names = glob.glob(image_path)
-    images = np.empty([len(file_names), 400, 400])
+    images = np.empty([len(file_names), 200, 200])
     for n, fname in enumerate(file_names):
         imdata = imageio.imread(fname, as_gray=True)
-        imdate = imdata.reshape(400*400)
+        imdate = imdata.reshape(200*200)
         images[n] = imdata
     # Load training labels
     labels = np.load(os.path.join(image_dir, 'labels.npy'))
