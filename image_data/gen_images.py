@@ -94,8 +94,11 @@ def save_data(folder, wigners, xvec, labels, params, imsize, dpi):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Generate images of the Wigner function of states")
-    parser.add_argument('--training', type=int, required=False, default=10,
+    parser.add_argument('--training', type=int, required=False, default=50,
         help="Number of images to generate for the training dataset",
+        metavar='NUM')
+    parser.add_argument('--test', type=int, required=False, default=20,
+        help="Number of images to generate for the test dataset",
         metavar='NUM')
     parser.add_argument('--xlim', type=float, required=False, default=5,
         help="Max/min value to plot the Wigner function for")
@@ -116,3 +119,7 @@ if __name__ == '__main__':
     xvec = np.linspace(-clas.xlim, clas.xlim, 200)
     data, labels, params = gen_wigner(clas.training, clas.truncation, xvec)
     save_data("training", data, xvec, labels, params, clas.imsize, clas.dpi)
+
+    if clas.test > 0:
+        data, labels, params = gen_wigner(clas.test, clas.truncation, xvec)
+        save_data("test", data, xvec, labels, params, clas.imsize, clas.dpi)
