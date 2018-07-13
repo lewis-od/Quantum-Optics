@@ -4,6 +4,8 @@ import imageio
 import numpy as np
 import tensorflow as tf
 
+tf.logging.set_verbosity(tf.logging.INFO)
+
 def cnn_model_fn(features, labels, mode):
     input_layer = tf.reshape(features["x"], [-1, 200, 200, 1])
 
@@ -43,7 +45,7 @@ def cnn_model_fn(features, labels, mode):
     loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits)
 
     if mode == tf.estimator.ModeKeys.TRAIN:
-        optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
+        optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
         train_op = optimizer.minimize(
             loss=loss, global_step=tf.train.get_global_step())
         return tf.estimator.EstimatorSpec(mode=mode, loss=loss, train_op=train_op)
@@ -55,6 +57,9 @@ def cnn_model_fn(features, labels, mode):
     }
     return tf.estimator.EstimatorSpec(
         mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
+
+def main(args):
+    pass
 
 if __name__ == '__main__':
 
