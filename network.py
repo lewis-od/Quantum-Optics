@@ -36,6 +36,7 @@ class NeuralNetwork(object):
         self.cross_entropy = None
         self.accuracy = None
         self.train_op = None
+        self.probabilities = None
         self.prediction = None
         self.correct_pred = None
         self.summaries = None
@@ -103,6 +104,8 @@ class NeuralNetwork(object):
         # Don't apply softmax activation yet, it's applied automatically when
         # calculating the loss
         y = self._nn_layer(hidden2, 25, 4, 'layer3', act=tf.identity)
+
+        self.probabilities = tf.nn.softmax(y, name='probabilities')
 
         # Use cross entropy loss function
         with tf.name_scope('cross_entropy'):
@@ -245,6 +248,17 @@ class NeuralNetwork(object):
                 self.keep_prob_input: 1.0
             })
         return pred[0]
+
+    def classify_dist(self, data):
+        """
+        Returns the probability distribution calculated by the network that the
+        state if of each type
+        """
+        dist = self.sess.run(self.probabilities, feed_dict={
+            self.x_input: [data],
+            self.keep_prob_input: 1.0
+        })
+        return dist[0]
 
     def save(self, model_dir):
         """Saves the values of weights and biases, as well as the hyperparameters"""
