@@ -32,15 +32,15 @@ def gen_wigner(n, T, xvec):
     for i in range(n):
         label = i % len(types)
         if label == 0:
-            n_photons = np.random.randint(0, T)
+            n_photons = np.random.randint(0, 4)
             params[i] = n_photons
             state = qu.basis(T, n_photons)
         elif label == 1:
-            alpha = rand_complex(5)
+            alpha = rand_complex(1.5)
             params[i] = alpha
             state = qu.coherent(T, alpha)
         elif label == 2:
-            z = rand_complex(1.4)
+            z = rand_complex(1.0)
             params[i] = z
             state = squeezed(T, z)
         elif label == 3:
@@ -102,7 +102,7 @@ if __name__ == '__main__':
         metavar='NUM')
     parser.add_argument('--xlim', type=float, required=False, default=5,
         help="Max/min value to plot the Wigner function for")
-    parser.add_argument('--truncation', type=int, required=False, default=80,
+    parser.add_argument('--truncation', type=int, required=False, default=51,
         help="The truncation to use when calculating the states", metavar='T')
     parser.add_argument('--imsize', type=int, required=False, default=200,
         help="The size of the images to generate (in pixels)", metavar='SIZE')

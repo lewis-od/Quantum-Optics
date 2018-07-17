@@ -45,7 +45,7 @@ def cnn_model_fn(features, labels, mode):
     loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits)
 
     if mode == tf.estimator.ModeKeys.TRAIN:
-        optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
+        optimizer = tf.train.AdamOptimizer(learning_rate=0.01)
         train_op = optimizer.minimize(
             loss=loss, global_step=tf.train.get_global_step())
         return tf.estimator.EstimatorSpec(mode=mode, loss=loss, train_op=train_op)
@@ -61,11 +61,8 @@ def cnn_model_fn(features, labels, mode):
 def main(args):
     pass
 
-if __name__ == '__main__':
-
-    cur_dir = os.path.abspath(".")
-    image_dir = os.path.join(cur_dir, "image_data", "training")
-    # Load training images
+def load_images(image_dir):
+    """Load images named wigner_*.png and their labels from image_dir"""
     image_path = os.path.join(image_dir, "wigner_*.png")
     file_names = glob.glob(image_path)
     images = np.empty([len(file_names), 200, 200])
@@ -76,6 +73,11 @@ if __name__ == '__main__':
     # Load training labels
     labels = np.load(os.path.join(image_dir, 'labels.npy'))
     labels = labels.astype(dtype=int)
+    return images, labels
+
+if __name__ == '__main__':
+    cur_dir = os.path.abspath(".")
+    images, labels = load_images(os.path.join(cur_dir, "image_data", "training"))
     state_classifier = tf.estimator.Estimator(
         model_fn=cnn_model_fn, model_dir=os.path.join(cur_dir, "cnn_summary"))
 
@@ -86,11 +88,20 @@ if __name__ == '__main__':
     train_input = tf.estimator.inputs.numpy_input_fn(
         x={ "x": images },
         y=labels,
-        batch_size = 1,
+        batch_size = 32,
         num_epochs=None,
         shuffle=True
     )
-
     state_classifier.train(input_fn=train_input, steps=500, hooks=[logging_hook])
+
+    images, labels = load_images(os.path.join(cur_dir, "image_data", "test"))
+    test_input = tf.estimator.inputs.numpy_input_fn(
+        x={ "x": images },
+        y=labels,
+        num_epochs=1,
+        shuffle=False
+    )
+    results = state_classifier.evaluate(input_fn=test_input)
+    print(results)
 
     tf.app.run()
