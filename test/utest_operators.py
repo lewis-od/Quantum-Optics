@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
-import quoptics.operators as ops
-from quoptics.states import Fock, Coherent, Squeezed
+import quoptics_old.operators as ops
+from quoptics_old.states import Fock, Coherent, Squeezed
 
 class TestOperators(unittest.TestCase):
 

@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from quoptics.states import Generic, Fock, Coherent, Squeezed
+from quoptics_old.states import Generic, Fock, Coherent, Squeezed
 
 class TestGenericState(unittest.TestCase):
 

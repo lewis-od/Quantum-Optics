@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from quoptics.states import Coherent, Fock
+from quoptics_old.states import Coherent, Fock
 
 class TestStates(unittest.TestCase):
 

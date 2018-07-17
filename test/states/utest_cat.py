@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from quoptics.states import Coherent, Cat
+from quoptics_old.states import Coherent, Cat
 
 class TestCat(unittest.TestCase):
 
