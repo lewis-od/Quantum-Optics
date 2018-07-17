@@ -13,15 +13,26 @@ T = 100
 def complex_range(max_x, npts):
     length = int(np.round(np.sqrt(npts)))
     x_vals = np.linspace(0, max_x, length)
-    mesh = np.empty([length, length], dtype=np.complex64)
-    for i, x in enumerate(x_vals):
-        for j, y in enumerate(x_vals):
-            mesh[i, j] = x + y*1j
-    output = mesh.reshape(length**2)
+    X, Y = np.meshgrid(x_vals, x_vals)
+    X = X.reshape(length**2)
+    Y = Y.reshape(length**2)
+    output = X + 1j*Y
     return output
 
 
 def find_fidelity_fn(state):
+    """
+    Classifies the input state using the neural network, then returns a function
+    that calculates the fidelity between the input state and the type of state
+    it was classified as, along with a range of parameter values to try.
+    For example, if the input state |psi> is classified as a coherent state, the
+    function returned will be:
+        f(alpha) = |<psi|alpha>|^2
+    And trial_values will be a list of complex numbers covering the grid formed
+    by +/-1.5 and +/-1.5i
+
+    :param state: A qutip.Qobj instance
+    """
     input = state.data.toarray().T[0]
     input = np.abs(input)
 
@@ -49,5 +60,5 @@ def find_fidelity_fn(state):
 
 def calc_fidelity(state):
     fid, trial = find_fidelity_fn(state)
-    fid_values = np.array([val for val in map(fid, trial)])
-    return fid_values.max()
+    fid_values = list(map(fid, trial))
+    return np.max(fid_values)
