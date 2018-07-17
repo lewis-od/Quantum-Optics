@@ -23,6 +23,7 @@ class StateIterator(object):
         self.n = 0
         self.batch_size = batch_size
         self.T = T
+        self.modulus = True
         self.types = ['fock', 'squeezed', 'coherent', 'cat']
 
     def __iter__(self):
@@ -55,14 +56,12 @@ class StateIterator(object):
         else:
             raise ValueError("Invalid type supplied")
 
-        data = np.abs(state.data.toarray().T[0])
-
         if self.n == self.batch_size:
             self.n = 0
             raise StopIteration
 
         self.n += 1
-        return data, label
+        return state, label
 
 def random_states(T, n):
     """
