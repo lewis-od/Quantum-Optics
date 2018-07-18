@@ -1,3 +1,4 @@
+import functools
 import numpy as np
 import tensorflow as tf
 from network import NeuralNetwork
@@ -27,6 +28,7 @@ def complex_range(max_x, npts):
     output = X + 1j*Y
     return output
 
+# TODO: Generate and save these ahead of time, then load from file at runtime
 FOCK_SPACE = [basis(T, n) for n in np.linspace(0, T-1, T, dtype=int)]
 COHERENT_SPACE = [coherent(T, alpha) for alpha in complex_range(1.5, 100)]
 SQUEEZED_SPACE = [squeezed(T, z) for z in complex_range(1.7, 100)]
@@ -60,7 +62,7 @@ def calc_fidelity(state):
         raise ValueError(("NeuralNetwork returned unkown classification. "
         "Received {} expected one of{0,1,2,3}").format(type))
 
-    fid_fn = np.vectorize(lambda s: fidelity(state, s))
+    fid_fn = np.vectorize(functools.partial(fidelity, state))
     fid_values = fid_fn(np.array(search_space))
     return np.max(fid_values)
 
@@ -69,14 +71,19 @@ if __name__ == '__main__':
     states = [x for x in StateIterator(100, T=100)]
     # Discard the state labels - we don't need them
     states, _ = zip(*states)
+    states = np.array(states)
+    # Format the data into a format the neural network accepts
+    state_data = [np.abs(state.data.toarray().T[0]) for state in states]
+    state_data = np.array(state_data)
     # Calculate the classification probability and fidelity for each state
-    probabilities = np.empty(100)
-    fidelities = np.empty(100)
-    for i, state in enumerate(states):
-        data = np.abs(state.data.toarray().T[0])
-        probabilities[i] = np.max(net.classify_dist(data))
-        fidelities[i] = calc_fidelity(state)
-        print("State {}: ({}, {})".format(i, probabilities[i], fidelities[i]))
+    prob_fn = lambda s: np.max(net.classify_dist(s))
+    fid_fn = np.vectorize(calc_fidelity)
+
+    probabilities = np.apply_along_axis(prob_fn, 1, state_data)
+    print("Probabilities calculated")
+    fidelities = fid_fn(states)
+    print("Fidelities calculated")
+
     # Plot fidelity against probability
     import matplotlib.pyplot as plt
     plt.figure()
