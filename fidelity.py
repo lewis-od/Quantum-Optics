@@ -27,75 +27,41 @@ def complex_range(max_x, npts):
     output = X + 1j*Y
     return output
 
+FOCK_SPACE = [basis(T, n) for n in np.linspace(0, T-1, T, dtype=int)]
+COHERENT_SPACE = [coherent(T, alpha) for alpha in complex_range(1.5, 100)]
+SQUEEZED_SPACE = [squeezed(T, z) for z in complex_range(1.7, 100)]
+alpha = complex_range(1.0, 50)
+theta = np.linspace(0, 2*np.pi, 50)
+alpha, theta = np.meshgrid(alpha, theta)
+alpha = alpha.reshape(alpha.size)
+theta = theta.reshape(theta.size)
+CAT_SPACE = [cat(T, *params) for params in zip(alpha, theta)]
+print("Search spaces initialized")
 
-def find_fidelity_fn(state):
+def calc_fidelity(state):
     """
-    Classifies the input state using the neural network, then returns a function
-    that calculates the fidelity between the input state and the type of state
-    it was classified as, along with a range of parameter values to try.
-    For example, if the input state |psi> is classified as a coherent state, the
-    function returned will be:
-        f(alpha) = |<psi|alpha>|^2
-    And trial_values will be a list of complex numbers covering the grid formed
-    by +/-1.5 and +/-1.5i
-
     :param state: A qutip.Qobj instance
     """
     input = state.data.toarray().T[0]
     input = np.abs(input)
 
     type = net.classify(input)
-    trial_values = None
 
-    fid_fn = None
+    search_space = None
     if type == 0:
-        fid_fn = np.vectorize(lambda param: fidelity(state, basis(T, param)))
-        trial_values = np.linspace(0, T-1, T, dtype=int)
+        search_space = FOCK_SPACE
     elif type == 1:
-        fid_fn = np.vectorize(lambda param: fidelity(state, coherent(T, param)))
-        trial_values = complex_range(1.5, 100)
+        search_space = COHERENT_SPACE
     elif type == 2:
-        fid_fn = np.vectorize(lambda param: fidelity(state, squeezed(T, param)))
-        trial_values = complex_range(1.7, 100)
+        search_space = SQUEEZED_SPACE
     elif type == 3:
-        fid_fn = lambda param: fidelity(state, cat(T, param[0], theta=param[1]))
-        # Fidelity function for non-exact cat states have 2 parameters
-        alpha = complex_range(1.0, 50)
-        theta = np.linspace(0, 2*np.pi, 50)
-        alpha, theta = np.meshgrid(alpha, theta)
-        alpha = alpha.reshape(alpha.size)
-        theta = theta.reshape(theta.size)
-
-        trial_values = zip(alpha, theta)
-        trial_values = np.array(list(trial_values)).T
+        search_space = CAT_SPACE
     else:
-        raise Exception(("Neural network returned unknown classification. "
-        "Expected one of [0,1,2,3] but received {}.").format(type))
+        raise ValueError(("NeuralNetwork returned unkown classification. "
+        "Received {} expected one of{0,1,2,3}").format(type))
 
-    return fid_fn, trial_values
-
-def calc_fidelity(state):
-    """
-    Calculates the maximum fidelity of the input state with the class of states
-    the inputs state is classified is. E.g. if `state` is a coherent state,
-    then:
-        F = \max_{\alpha} |<\psi|\alpha>|^2
-    is calculated.
-
-    :param state: a qutip.Qobj instance
-    """
-    # fid is a function that takes a parameter as input and calculates the
-    # fidelity of `state` with the fock/coherent/squezed/cat state with the
-    # given parameter. See find_fidelity_fn for more details. trial is an array
-    # of values to try for the parameter.
-    # import pdb; pdb.set_trace()
-    fid, trial = find_fidelity_fn(state)
-    # Calculate the fidelity for each trial value of the parameter
-    # TODO: Speed this up. Try only calculating all states in the search space
-    # for each type of state once at the start, then calcuting fidelity is
-    # only a matrix multiplication
-    fid_values = np.apply_along_axis(fid, 0, trial)
-    # Return the maximum fidelity value
+    fid_fn = np.vectorize(lambda s: fidelity(state, s))
+    fid_values = fid_fn(np.array(search_space))
     return np.max(fid_values)
 
 if __name__ == '__main__':
