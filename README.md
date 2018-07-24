@@ -1,18 +1,17 @@
 # Quantum Optics   
 
 Python code with the ultimate goal of classifying quantum states of light using
-a neural network
+a neural network.
 
-The `quoptics` module contains useful code for producing various states (e.g.
-coherent states, squeezed states, etc). It also has matrix representations of
-various operators.
-The vectors it produces are in the Fock basis, so the nth component of the
-vector is the coefficient of |n>, or equivalently `psi[n] = <n|psi>`
+The `quoptics` module contains helper functions for creating some more exotic
+states, i.e. cat states, using [QuTiP](http://qutip.org).   
+The [legacy](legacy/quoptics) folder contains code that was written before I
+discovered QuTiP, that is all already implemented in QuTiP.
 
-Run `python data/gen_data.py` to generate training/test/validation data for the
-network. The data is produced as an array of states and an array of labels, such
- that `states[n]` is labelled by `label[n]`. The labels are integers labelling
- which type the state is according to:
+Running `python data/gen_data.py` will generate training/test/validation data 
+for the network in the `data` folder. The data is produced as an array of states
+ and an array of labels, such that `states[n]` is labelled by `label[n]`. The
+ labels are integers labelling which type the state is according to:
 
 | Label  | State Type |
 | ------ | ---------- |
@@ -21,12 +20,8 @@ network. The data is produced as an array of states and an array of labels, such
 |    2   |  Squeezed  |
 |    3   |    Cat     |
 
-After generating some data, run `python network.py` to train and test the
-neural network.   
-Alternatively, to load and test a pre-trained network, run
-`python network.py --restore weights`.   
-Run `python network.py --help` for more information on command-line arguments.
+Running `python network.py` will load the pre-trained model from the `model`
+folder, and test it's accuracy against the data in `data/test.npz`.
 
-Once the network has been trained, run `tensorboad --logdir=summary` and go to
-the address shown to view a visual summary of the network (accuracy, loss
-function, values of biases and weights, etc).
+The file [cnn.py](cnn.py) is a convolutional neural network that classifies
+states by analysing a plot of their Wigner function.
