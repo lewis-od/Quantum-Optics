@@ -44,13 +44,17 @@ class NeuralNetwork(object):
 
     def predict(self, states):
         pred_input = tf.estimator.inputs.numpy_input_fn(
-            { 'coefficients': states}, batch_size=1, shuffle=False)
+            { 'coefficients': states }, batch_size=1, shuffle=False)
         prediction = list(self.estimator.predict(pred_input))
         return prediction
 
     def classify(self, state):
         prediction = self.predict(np.array([state]))[0]
         return prediction['class_ids'][0]
+
+    def classify_dist(self, state):
+        prediction = self.predict(np.array([state]))[0]
+        return prediction['probabilities']
 
 if __name__ == '__main__':
     tf.logging.set_verbosity(tf.logging.INFO)

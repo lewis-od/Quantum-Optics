@@ -1,3 +1,4 @@
+import os
 import functools
 import numpy as np
 import tensorflow as tf
@@ -7,10 +8,10 @@ from qutip.states import coherent, basis
 from quoptics.states import cat, squeezed
 from quoptics.states import StateIterator
 
-sess = tf.Session()
-net = NeuralNetwork(sess)
-net.restore("weights")
-T = 100
+cur_dir = os.path.abspath('.')
+model_dir = os.path.join(cur_dir, "model")
+net = NeuralNetwork(model_dir=model_dir)
+T = 25
 
 def complex_range(max_x, npts):
     """
@@ -40,15 +41,11 @@ theta = theta.reshape(theta.size)
 CAT_SPACE = [cat(T, *params) for params in zip(alpha, theta)]
 print("Search spaces initialized")
 
-def calc_fidelity(state):
+def calc_fidelity(state_info):
     """
     :param state: A qutip.Qobj instance
     """
-    input = state.data.toarray().T[0]
-    input = np.abs(input)
-
-    type = net.classify(input)
-
+    state, type = state_info
     search_space = None
     if type == 0:
         search_space = FOCK_SPACE
@@ -68,7 +65,7 @@ def calc_fidelity(state):
 
 if __name__ == '__main__':
     # Generate 100 random states (with labels)
-    states = [x for x in StateIterator(100, T=100)]
+    states = [x for x in StateIterator(100, T=T)]
     # Discard the state labels - we don't need them
     states, _ = zip(*states)
     states = np.array(states)
@@ -76,12 +73,13 @@ if __name__ == '__main__':
     state_data = [np.abs(state.data.toarray().T[0]) for state in states]
     state_data = np.array(state_data)
     # Calculate the classification probability and fidelity for each state
-    prob_fn = lambda s: np.max(net.classify_dist(s))
-    fid_fn = np.vectorize(calc_fidelity)
-
-    probabilities = np.apply_along_axis(prob_fn, 1, state_data)
+    predictions = net.predict(state_data)
+    probabilities = np.array([np.max(p['probabilities']) for p in predictions])
     print("Probabilities calculated")
-    fidelities = fid_fn(states)
+    classifications = np.array([p['class_ids'][0] for p in predictions])
+    # fid_fn = np.vectorize(calc_fidelity)
+    # fidelities = fid_fn(state_info)
+    fidelities = [calc_fidelity(info) for info in zip(states, classifications)]
     print("Fidelities calculated")
 
     # Plot fidelity against probability
