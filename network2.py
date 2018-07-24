@@ -67,15 +67,3 @@ if __name__ == '__main__':
     print("Confusion Matrix:")
     conf_mat_str = "    " + str(conf_mat).replace("\n", "\n    ")
     print(conf_mat_str)
-
-# test_states, actual = input_fn_test()
-# # Workaround for tensorflow bug
-# # (see https://github.com/tensorflow/tensorflow/issues/11621)
-# conf_input = tf.estimator.inputs.numpy_input_fn(
-#     test_states, batch_size=1, shuffle=False)
-# predictions = list(estimator.predict(conf_input))
-#
-# predictions = [d['class_ids'][0] for d in predictions]
-# with tf.Session().as_default():
-#     conf_mat = tf.confusion_matrix(actual, predictions).eval()
-# print(conf_mat)

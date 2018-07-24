@@ -4,3 +4,5 @@ summary
 cnn_summary
 image_data/training
 image_data/test
+model/events.*
+model/eval
