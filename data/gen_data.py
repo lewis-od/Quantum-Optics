@@ -17,12 +17,12 @@ def rand_complex(modulus):
     z = r * np.exp(1j*theta)
     return z
 
-def gen_states(n):
+def gen_states(n, cutoff):
     """Generates n random states"""
     # Types of state
     types = ['fock', 'coherent', 'squeezed', 'cat']
     # Array to hold all generated states
-    states = np.zeros([n, T], dtype=np.complex64)
+    states = np.zeros([n, cutoff], dtype=np.complex64)
     labels = np.zeros(n)
     state = None
     for i in range(n):
@@ -32,7 +32,7 @@ def gen_states(n):
         type = types[id]
         # Generate the state
         if type == 'fock':
-            n_photons = np.random.randint(0, T)
+            n_photons = np.random.randint(0, cutoff)
             state = basis(T, n_photons)
         elif type == 'coherent':
             alpha = rand_complex(1.0)
@@ -48,7 +48,8 @@ def gen_states(n):
         else:
             raise ValueError("Invalid type supplied")
         # Convert column vector to row vector
-        states[i] = state.data.toarray().T[0]
+        data = state.data.toarray().T[0]
+        states[i] = data[:cutoff]
 
     return (states, labels)
 
@@ -87,7 +88,9 @@ if __name__ == '__main__':
     parser.add_argument('--validation', type=int, required=False, default=2000,
         help='Number of states to generate for validation (default: 2000)')
     parser.add_argument('--truncation', type=int, required=False, default=100,
-        help='Length of state vectors generated (default: 100)')
+        help='Size of matrices to use when calculating states', metavar='T')
+    parser.add_argument('--cutoff', type=int, required=False, default=25,
+        help='Length of state vectors generated', metavar='LEN')
 
     # Parse arguments
     params = parser.parse_args()
@@ -98,9 +101,9 @@ if __name__ == '__main__':
     print("Generating data with params {}".format(params.__dict__))
 
     # Generate data
-    training = gen_states(params.training)
-    test = gen_states(params.test)
-    validation = gen_states(params.validation)
+    training = gen_states(params.training, params.cutoff)
+    test = gen_states(params.test, params.cutoff)
+    validation = gen_states(params.validation, params.cutoff)
 
     save_data(training, "train")
     save_data(test, "test")
