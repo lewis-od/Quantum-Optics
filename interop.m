@@ -5,16 +5,8 @@ if (loaded == 0)
     pyversion '/usr/local/bin/python3'
 end
 
-% Create a tensorflow session
-sess = py.tensorflow.Session();
 % Create a NeuralNetwork object (from network.py)
-net = py.network.NeuralNetwork(sess);
-% Load the pre-trained network
-net.restore("weights");
+net = py.network.NeuralNetwork("model");
 
 % Run the network against the test data and print the results
-net.test()
-
-% Clean up
-py.tensorflow.reset_default_graph();
-sess.close()
+net.test("data/test.npz")
