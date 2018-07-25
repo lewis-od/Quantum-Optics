@@ -1,14 +1,14 @@
 import sys
 import os
+import argparse
+import numpy as np
 # TODO: There must be a better way to do this?
 directory = os.path.abspath(os.path.join(__file__, os.pardir))
 parent = os.path.abspath(os.path.join(directory, os.pardir))
 sys.path.append(parent)
 
-import argparse
 from qutip.states import basis, coherent
 from quoptics.states import cat, squeezed
-import numpy as np
 
 def rand_complex(modulus):
     """Generates a random complex number with |z| < modulus"""
