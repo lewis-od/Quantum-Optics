@@ -5,9 +5,11 @@ import tensorflow as tf
 
 class NeuralNetwork(object):
     def __init__(self, model_dir=None, dropout=0.2, learning_rate=0.001):
-        self.estimator = self.__create_estimator(model_dir, dropout, learning_rate)
+        self.__learning_rate = learning_rate
+        self.__create_estimator = functools.partial(self.__estimator_factory, model_dir, dropout)
+        self.estimator = self.__create_estimator(learning_rate)
 
-    def __create_estimator(self, model_dir, dropout, learning_rate):
+    def __estimator_factory(self, model_dir, dropout, learning_rate):
         coefficients = tf.feature_column.numeric_column('coefficients',
             shape=[25])
         estimator = tf.estimator.DNNClassifier(
@@ -26,6 +28,15 @@ class NeuralNetwork(object):
         labels = data['labels'].astype(int)
 
         return { 'coefficients': states }, labels
+
+    @property
+    def learning_rate(self):
+        return self.__learning_rate
+
+    @learning_rate.setter
+    def learning_rate(self, val):
+        self.__learning_rate = val
+        self.estimator = self.__create_estimator(val)
 
     def train(self, train_file, steps):
         train_fn = functools.partial(self.__input_fn, train_file)
