@@ -57,7 +57,7 @@ class NeuralNetwork(object):
         return prediction['probabilities']
 
 if __name__ == '__main__':
-    tf.logging.set_verbosity(tf.logging.INFO)
+    tf.logging.set_verbosity(tf.logging.WARN)
 
     cur_dir = os.path.abspath('.')
     model_dir=os.path.join(cur_dir, "model")

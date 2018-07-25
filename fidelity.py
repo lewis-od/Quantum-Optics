@@ -38,12 +38,13 @@ alpha, theta = np.meshgrid(alpha, theta)
 alpha = alpha.reshape(alpha.size)
 theta = theta.reshape(theta.size)
 CAT_SPACE = [cat(T, *params) for params in zip(alpha, theta)]
+ZOMBIE_SPACE = [zombie(T, alpha) for alpha in complex_range(1.0, 100)]
 
 # Convert QuTiP Qobjs to numpy arrays
 FOCK_SPACE = [s.data.toarray().T[0] for s in FOCK_SPACE]
-COHERENT_SPACE = [s.data.toarray().T[0] for s in COHERENT_SPACE]
 SQUEEZED_SPACE = [s.data.toarray().T[0] for s in SQUEEZED_SPACE]
 CAT_SPACE = [s.data.toarray().T[0] for s in CAT_SPACE]
+ZOMBIE_SPACE = [s.data.toarray().T[0] for s in ZOMBIE_SPACE]
 end_time = datetime.datetime.now()
 print("Search spaces initialized - " + str(end_time - start_time))
 
@@ -60,11 +61,11 @@ def calc_fidelity(state_info):
     if type == 0:
         search_space = FOCK_SPACE
     elif type == 1:
-        search_space = COHERENT_SPACE
-    elif type == 2:
         search_space = SQUEEZED_SPACE
-    elif type == 3:
+    elif type == 2:
         search_space = CAT_SPACE
+    elif type == 3:
+        search_space = ZOMBIE_SPACE
     else:
         raise ValueError(("NeuralNetwork returned unkown classification. "
         "Received {} expected one of{0,1,2,3}").format(type))
@@ -74,12 +75,8 @@ def calc_fidelity(state_info):
     return np.max(fid_values)
 
 if __name__ == '__main__':
-    # Generate 100 random states (with labels)
-    states, _ = random_states(T, 100)
-
-    # Convert QuTiP Qobjs to numpy arrays
-    state_data = [np.abs(state.data.toarray().T[0]) for state in states]
-    state_data = np.array(state_data)
+    # Generate 100 random states (discard labels)
+    state_data, _ = random_states(T, 100, qutip=False)
 
     # Classify the states and calculate the corresponding classification prob.
     start_time = datetime.datetime.now()
