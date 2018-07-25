@@ -4,8 +4,7 @@ import numpy as np
 from network import NeuralNetwork
 from qutip import fidelity
 from qutip.states import coherent, basis
-from quoptics.states import cat, squeezed
-from quoptics.states import StateIterator
+from quoptics.states import cat, squeezed, random_states
 
 cur_dir = os.path.abspath('.')
 model_dir = os.path.join(cur_dir, "model")
@@ -76,10 +75,7 @@ def calc_fidelity(state_info):
 
 if __name__ == '__main__':
     # Generate 100 random states (with labels)
-    states = [x for x in StateIterator(100, T=T)]
-    # Discard the state labels - we don't need them
-    states, _ = zip(*states)
-    states = np.array(states)
+    states, _ = random_states(T, 100)
 
     # Convert QuTiP Qobjs to numpy arrays
     state_data = [np.abs(state.data.toarray().T[0]) for state in states]
