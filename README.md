@@ -8,17 +8,17 @@ states, i.e. cat states, using [QuTiP](http://qutip.org).
 The [legacy](legacy/quoptics) folder contains code that was written before I
 discovered QuTiP, that is all already implemented in QuTiP.
 
-Running `python data/gen_data.py` will generate training/test/validation data 
+Running `python data/gen_data.py` will generate training/test/validation data
 for the network in the `data` folder. The data is produced as an array of states
  and an array of labels, such that `states[n]` is labelled by `label[n]`. The
  labels are integers labelling which type the state is according to:
 
 | Label  | State Type |
 | ------ | ---------- |
-|    0   |    Fock    |
-|    1   |  Coherent  |
-|    2   |  Squeezed  |
-|    3   |    Cat     |
+|   0    |    Fock    |
+|   1    |  Squeezed  |
+|   2    |    Cat     |
+|   3    |   Zombie   |
 
 Running `python network.py` will load the pre-trained model from the `model`
 folder, and test it's accuracy against the data in `data/test.npz`.
