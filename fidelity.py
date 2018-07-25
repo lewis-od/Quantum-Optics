@@ -4,7 +4,7 @@ import numpy as np
 from network import NeuralNetwork
 from qutip import fidelity
 from qutip.states import coherent, basis
-from quoptics.states import cat, squeezed, random_states
+from quoptics.states import cat, squeezed, zombie, random_states
 
 cur_dir = os.path.abspath('.')
 model_dir = os.path.join(cur_dir, "model")
