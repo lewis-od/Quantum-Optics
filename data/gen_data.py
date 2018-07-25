@@ -25,14 +25,6 @@ def save_data(data, name):
     except Exception as e:
         print("Unable to create file " + output + ": " + str(e))
 
-def parse_arg(n):
-    argument = None
-    try:
-        argument = int(sys.argv[n])
-    except:
-        pass
-    return argument
-
 if __name__ == '__main__':
     # Create argument parser
     parser = argparse.ArgumentParser(description=("Generate data for training "
@@ -52,16 +44,18 @@ if __name__ == '__main__':
     # Parse arguments
     params = parser.parse_args()
 
-    # Set truncation
+    # Set truncation and cutoff
     T = params.truncation
+    C = params.cutoff
 
     print("Generating data with params {}".format(params.__dict__))
 
     # Generate data
-    training = random_states(T, params.training, cutoff=params.cutoff, qutip=False)
-    test = random_states(T, params.test, cutoff=params.cutoff, qutip=False)
-    validation = random_states(T, params.validation, cutoff=params.cutoff, qutip=False)
+    training = random_states(T, params.training, cutoff=C, qutip=False)
+    test = random_states(T, params.test, cutoff=C, qutip=False)
+    validation = random_states(T, params.validation, cutoff=C, qutip=False)
 
+    # Save data
     save_data(training, "train")
     save_data(test, "test")
     save_data(validation, "validation")
