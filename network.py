@@ -75,9 +75,9 @@ if __name__ == '__main__':
 
     net = NeuralNetwork(model_dir=model_dir)
 
-    # metrics, conf_mat = net.test(os.path.join(cur_dir, "data", "test.npz"))
-    # print("Metrics:")
-    # print(metrics)
-    # print("Confusion Matrix:")
-    # conf_mat_str = "    " + str(conf_mat).replace("\n", "\n    ")
-    # print(conf_mat_str)
+    metrics, conf_mat = net.test(os.path.join(cur_dir, "data", "test.npz"))
+    print("Metrics:")
+    print(metrics)
+    print("Confusion Matrix:")
+    conf_mat_str = "    " + str(conf_mat).replace("\n", "\n    ")
+    print(conf_mat_str)
