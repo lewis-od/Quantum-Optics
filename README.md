@@ -13,12 +13,13 @@ for the network in the `data` folder. The data is produced as an array of states
  and an array of labels, such that `states[n]` is labelled by `label[n]`. The
  labels are integers labelling which type the state is according to:
 
-| Label  | State Type |
-| ------ | ---------- |
-|   0    |    Fock    |
-|   1    |  Squeezed  |
-|   2    |    Cat     |
-|   3    |   Zombie   |
+| Label  |  State Type  |
+| ------ | ------------ |
+|   0    |     Fock     |
+|   1    |     Cat      |
+|   2    | Squeezed Cat |
+|   3    |    Zombie    |
+|   4    |  Cubic Phase |
 
 Running `python network.py` will load the pre-trained model from the `model`
 folder, and test it's accuracy against the data in `data/test.npz`.

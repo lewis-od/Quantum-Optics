@@ -1,8 +1,8 @@
 from qutip.states import coherent, basis
-from qutip.operators import squeeze
+from qutip.operators import squeeze, position
 import numpy as np
 
-TYPES = ['fock', 'cat', 'zombie', 'squeezed_cat']
+TYPES = ['fock', 'cat', 'zombie', 'squeezed_cat', 'cubic_phase']
 
 def cat(T, alpha, theta=0):
     """
@@ -36,6 +36,14 @@ def squeezed_cat(T, alpha, z):
     c = cat(T, alpha)
     S = squeeze(T, z)
     return (S * c).unit()
+
+def cubic_phase(T, gamma, z):
+    """Returns a finitely squeezed approximation to a cubic phase state"""
+    q = position(T)
+    V = (1j*gamma*q**3).expm()
+    S = squeeze(T, z)
+    vac = basis(T, 0)
+    return (V * S * vac)
 
 class StateIterator(object):
     def __init__(self, batch_size, T=100, cutoff=25, qutip=True):
@@ -74,6 +82,10 @@ class StateIterator(object):
             alpha = self._rand_complex(1.0)
             z = self._rand_complex(1.0)
             state = squeezed_cat(self.T, alpha, z)
+        elif type == 'cubic_phase':
+            gamma = np.random.rand() * 0.25
+            z = np.random.exponential(2)
+            state = cubic_phase(self.T, gamma, z)
         else:
             raise ValueError("Invalid type supplied")
 
