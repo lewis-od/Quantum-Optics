@@ -2,7 +2,7 @@ from qutip.states import coherent, basis
 from qutip.operators import squeeze, position
 import numpy as np
 
-TYPES = ['fock', 'cat', 'zombie', 'squeezed_cat', 'cubic_phase']
+TYPES = ['fock', 'cat', 'zombie', 'squeezed_cat', 'cubic_phase', 'on']
 
 def cat(T, alpha, theta=0):
     """
@@ -45,6 +45,11 @@ def cubic_phase(T, gamma, z):
     vac = basis(T, 0)
     return (V * S * vac)
 
+def on_state(T, n, delta):
+    O = basis(T, 0)
+    N = basis(T, n)
+    return (O + delta*N).unit()
+
 class StateIterator(object):
     def __init__(self, batch_size, T=100, cutoff=25, qutip=True):
         self.n = 0
@@ -86,6 +91,10 @@ class StateIterator(object):
             gamma = np.random.rand() * 0.25
             z = np.random.exponential(2)
             state = cubic_phase(self.T, gamma, z)
+        elif type == 'on':
+            n = np.random.randint(0, self.cutoff)
+            delta = np.random.rand()
+            state = on_state(self.T, n, delta)
         else:
             raise ValueError("Invalid type supplied")
 

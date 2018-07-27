@@ -52,8 +52,11 @@ if __name__ == '__main__':
 
     # Generate data
     training = random_states(T, params.training, cutoff=C, qutip=False)
+    print("Generated training data")
     test = random_states(T, params.test, cutoff=C, qutip=False)
+    print("Generated test data")
     validation = random_states(T, params.validation, cutoff=C, qutip=False)
+    print("Generated validation data")
 
     # Save data
     save_data(training, "train")

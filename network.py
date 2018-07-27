@@ -15,7 +15,7 @@ class NeuralNetwork(object):
         estimator = tf.estimator.DNNClassifier(
                 feature_columns=[coefficients],
                 hidden_units=[25, 25, 10],
-                n_classes=5,
+                n_classes=6,
                 optimizer=tf.train.AdamOptimizer(learning_rate=learning_rate),
                 dropout=dropout,
                 model_dir=model_dir
@@ -75,9 +75,9 @@ if __name__ == '__main__':
 
     net = NeuralNetwork(model_dir=model_dir)
 
-    metrics, conf_mat = net.test(os.path.join(cur_dir, "data", "test.npz"))
-    print("Metrics:")
-    print(metrics)
-    print("Confusion Matrix:")
-    conf_mat_str = "    " + str(conf_mat).replace("\n", "\n    ")
-    print(conf_mat_str)
+    # metrics, conf_mat = net.test(os.path.join(cur_dir, "data", "test.npz"))
+    # print("Metrics:")
+    # print(metrics)
+    # print("Confusion Matrix:")
+    # conf_mat_str = "    " + str(conf_mat).replace("\n", "\n    ")
+    # print(conf_mat_str)
