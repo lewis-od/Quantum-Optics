@@ -20,6 +20,7 @@ for the network in the `data` folder. The data is produced as an array of states
 |   2    | Squeezed Cat |
 |   3    |    Zombie    |
 |   4    |  Cubic Phase |
+|   5    |      ON      | 
 
 Running `python network.py` will load the pre-trained model from the `model`
 folder, and test it's accuracy against the data in `data/test.npz`.
