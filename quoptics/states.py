@@ -2,7 +2,7 @@ from qutip.states import coherent, basis
 from qutip.operators import squeeze
 import numpy as np
 
-TYPES = ['fock', 'squeezed', 'cat', 'zombie']
+TYPES = ['fock', 'cat', 'zombie', 'squeezed_cat']
 
 def cat(T, alpha, theta=0):
     """
@@ -31,6 +31,12 @@ def squeezed(T, z):
     S = squeeze(T, z)
     return S * vac
 
+def squeezed_cat(T, alpha, z):
+    """Returns a squeezed cat state"""
+    c = cat(T, alpha)
+    S = squeeze(T, z)
+    return (S * c).unit()
+
 class StateIterator(object):
     def __init__(self, batch_size, T=100, cutoff=25, qutip=True):
         self.n = 0
@@ -56,9 +62,6 @@ class StateIterator(object):
         if type == 'fock':
             n_photons = np.random.randint(0, self.cutoff)
             state = basis(self.T, n_photons)
-        elif type == 'squeezed':
-            z = self._rand_complex(1.0)
-            state = squeezed(self.T, z)
         elif type == 'cat':
             # Choose sign of cat state at random
             theta = np.random.rand() * np.pi * 2
@@ -67,6 +70,10 @@ class StateIterator(object):
         elif type == 'zombie':
             alpha = self._rand_complex(1.0)
             state = zombie(self.T, alpha)
+        elif type == 'squeezed_cat':
+            alpha = self._rand_complex(1.0)
+            z = self._rand_complex(1.0)
+            state = squeezed_cat(self.T, alpha, z)
         else:
             raise ValueError("Invalid type supplied")
 
