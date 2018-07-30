@@ -9,7 +9,10 @@ the `NeuralNetwork` class for classifying states.
 The [legacy](legacy/quoptics) folder contains code that was written before I
 discovered QuTiP, that is all already implemented in QuTiP.
 
-Running `python data/gen_data.py` will generate training/test/validation data
+To ensure the required packages are installed, run
+`pip3 install -r requirements.txt`   
+
+Running `python3 data/gen_data.py` will generate training/test/validation data
 for the network in the `data` folder. The data is produced as an array of states
  and an array of labels, such that `states[n]` is labelled by `label[n]`. The
  labels are integers labelling which type the state is according to:
@@ -23,8 +26,8 @@ for the network in the `data` folder. The data is produced as an array of states
 |   4    |  Cubic Phase |
 |   5    |      ON      |
 
-Running `python test_network.py` will load the pre-trained model from the
+Running `python3 test_network.py` will load the pre-trained model from the
 `model` folder, and test it's accuracy against the data in `data/test.npz`.
 
-The file [cnn.py](cnn.py) is a convolutional neural network that classifies
-states by analysing a plot of their Wigner function.
+The file [cnn.py](cnn.py) is the start of a convolutional neural network that
+classifies states by analysing a plot of their Wigner function.
