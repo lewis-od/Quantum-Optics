@@ -49,20 +49,63 @@
 </div>
 <div class="section" id="module-quoptics.network">
 <span id="quoptics-network-module"></span><h2>quoptics.network module<a class="headerlink" href="#module-quoptics.network" title="Permalink to this headline">¶</a></h2>
-<p>Neural network for classifying states</p>
 <dl class="class">
 <dt id="quoptics.network.NeuralNetwork">
 <em class="property">class </em><code class="descclassname">quoptics.network.</code><code class="descname">NeuralNetwork</code><span class="sig-paren">(</span><em>model_dir=None</em>, <em>dropout=0.2</em>, <em>learning_rate=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A tensorflow neural network for classifying quantum states of light</p>
+<p>When inputting a state</p>
+<div class="math notranslate nohighlight">
+\[\lvert \psi \rangle = \sum_{n=o}^{\infty} c_n \lvert n \rangle\]</div>
+<p>where the <span class="math notranslate nohighlight">\(\lvert n \rangle\)</span> are Fock states, the network expects the
+state data to be in the form of a numpy array, where the <span class="math notranslate nohighlight">\(n\)</span> th
+element is the modulus of <span class="math notranslate nohighlight">\(c_n\)</span>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>model_dir</strong> – The directory to save/load the model data to/from</li>
+<li><strong>dropout</strong> – The dropout probability to use when training</li>
+<li><strong>learning_rate</strong> – The learning rate to use when training</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="quoptics.network.NeuralNetwork.classify">
 <code class="descname">classify</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork.classify" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Classify a state using the network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> – The state to classify</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An integer indicating the category the state belongs to</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="quoptics.network.NeuralNetwork.classify_dist">
 <code class="descname">classify_dist</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork.classify_dist" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Classify a state using the network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> – The state to classify</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An array containing a probability distribution, where the nth
+entry is the probability that the state belongs to category n, as
+predicted by the network</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="quoptics.network.NeuralNetwork.learning_rate">
@@ -72,17 +115,58 @@
 <dl class="method">
 <dt id="quoptics.network.NeuralNetwork.predict">
 <code class="descname">predict</code><span class="sig-paren">(</span><em>states</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork.predict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Run the input array through the
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator#predict">tensorflow.estimator.Estimator.predict</a>
+method</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>states</strong> – A numpy array containing multiple test_states</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary containing the classification information</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="quoptics.network.NeuralNetwork.test">
 <code class="descname">test</code><span class="sig-paren">(</span><em>test_file</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork.test" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Test the neural network against a test dataset</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>test_file</strong> – The file containing the test data</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns metrics:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Various metrics about the accuracy of the network</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Returns conf_mat:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The confusion matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="quoptics.network.NeuralNetwork.train">
 <code class="descname">train</code><span class="sig-paren">(</span><em>train_file</em>, <em>steps</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork.train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Train the neural network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>train_file</strong> – The file containing the training data</li>
+<li><strong>steps</strong> – How many training steps to run</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
