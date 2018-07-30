@@ -6,3 +6,4 @@ image_data/training
 image_data/test
 model/events.*
 model/eval
+docs/build

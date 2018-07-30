@@ -1,3 +1,6 @@
+"""
+Neural network for classifying states
+"""
 import functools
 import numpy as np
 import tensorflow as tf
