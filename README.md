@@ -30,4 +30,7 @@ Running `python3 test_network.py` will load the pre-trained model from the
 `model` folder, and test it's accuracy against the data in `data/test.npz`.
 
 The file [cnn.py](cnn.py) is the start of a convolutional neural network that
-classifies states by analysing a plot of their Wigner function.
+classifies states by analysing a plot of their Wigner function.   
+
+The documentation for the quoptics module is available to view
+[here](https://lewis-od.github.io/Quantum-Optics/).
