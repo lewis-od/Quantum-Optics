@@ -92,7 +92,7 @@ class StateIterator(object):
             z = np.random.exponential(2)
             state = cubic_phase(self.T, gamma, z)
         elif type == 'on':
-            n = np.random.randint(0, self.cutoff)
+            n = np.random.randint(1, self.cutoff)
             delta = np.random.rand()
             state = on_state(self.T, n, delta)
         else:
