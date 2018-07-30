@@ -1,4 +1,3 @@
-import os
 import functools
 import numpy as np
 import tensorflow as tf
@@ -66,18 +65,3 @@ class NeuralNetwork(object):
     def classify_dist(self, state):
         prediction = self.predict(np.array([state]))[0]
         return prediction['probabilities']
-
-if __name__ == '__main__':
-    tf.logging.set_verbosity(tf.logging.WARN)
-
-    cur_dir = os.path.abspath('.')
-    model_dir=os.path.join(cur_dir, "model")
-
-    net = NeuralNetwork(model_dir=model_dir)
-
-    metrics, conf_mat = net.test(os.path.join(cur_dir, "data", "test.npz"))
-    print("Metrics:")
-    print(metrics)
-    print("Confusion Matrix:")
-    conf_mat_str = "    " + str(conf_mat).replace("\n", "\n    ")
-    print(conf_mat_str)
