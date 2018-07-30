@@ -6,7 +6,7 @@ if (loaded == 0)
 end
 
 % Create a NeuralNetwork object (from network.py)
-net = py.network.NeuralNetwork("model");
+net = py.quoptics.network.NeuralNetwork("model");
 
 % Run the network against the test data and print the results
 net.test("data/test.npz")
