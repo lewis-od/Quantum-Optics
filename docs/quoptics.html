@@ -1,0 +1,356 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>quoptics package &#8212; QuOptics  documentation</title>
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">QuOptics  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="quoptics-package">
+<h1>quoptics package<a class="headerlink" href="#quoptics-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-quoptics.network">
+<span id="quoptics-network-module"></span><h2>quoptics.network module<a class="headerlink" href="#module-quoptics.network" title="Permalink to this headline">¶</a></h2>
+<p>Neural network for classifying states</p>
+<dl class="class">
+<dt id="quoptics.network.NeuralNetwork">
+<em class="property">class </em><code class="descclassname">quoptics.network.</code><code class="descname">NeuralNetwork</code><span class="sig-paren">(</span><em>model_dir=None</em>, <em>dropout=0.2</em>, <em>learning_rate=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="quoptics.network.NeuralNetwork.classify">
+<code class="descname">classify</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork.classify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="quoptics.network.NeuralNetwork.classify_dist">
+<code class="descname">classify_dist</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork.classify_dist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="quoptics.network.NeuralNetwork.learning_rate">
+<code class="descname">learning_rate</code><a class="headerlink" href="#quoptics.network.NeuralNetwork.learning_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="quoptics.network.NeuralNetwork.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>states</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork.predict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="quoptics.network.NeuralNetwork.test">
+<code class="descname">test</code><span class="sig-paren">(</span><em>test_file</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="quoptics.network.NeuralNetwork.train">
+<code class="descname">train</code><span class="sig-paren">(</span><em>train_file</em>, <em>steps</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-quoptics.states">
+<span id="quoptics-states-module"></span><h2>quoptics.states module<a class="headerlink" href="#module-quoptics.states" title="Permalink to this headline">¶</a></h2>
+<p>Methods for generating different types of state</p>
+<dl class="class">
+<dt id="quoptics.states.StateIterator">
+<em class="property">class </em><code class="descclassname">quoptics.states.</code><code class="descname">StateIterator</code><span class="sig-paren">(</span><em>batch_size</em>, <em>T=100</em>, <em>cutoff=25</em>, <em>qutip=True</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.StateIterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>An <a class="reference external" href="https://docs.python.org/3/glossary.html#term-iterator">iterator</a>
+object that generates random states</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>batch_size</strong> – How many states to generate</li>
+<li><strong>T</strong> – The truncation to when generating each state</li>
+<li><strong>cutoff</strong> – The length of the generated state vectors</li>
+<li><strong>qutip</strong> – Whether to return states as <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> or numpy
+arrays</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="quoptics.states.cat">
+<code class="descclassname">quoptics.states.</code><code class="descname">cat</code><span class="sig-paren">(</span><em>T</em>, <em>alpha</em>, <em>theta=0</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.cat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a  normalised cat state of the form</p>
+<div class="math notranslate nohighlight">
+\[\lvert \text{cat} \rangle_{\theta} = \mathcal{N} \left ( \lvert \alpha \
+\rangle + e^{i\theta} \lvert -\alpha \rangle \right )\]</div>
+<p>Where <span class="math notranslate nohighlight">\(\lvert \alpha \rangle\)</span> are <a class="reference external" href="http://qutip.org/docs/latest/apidoc/functions.html#qutip.states.coherent" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">coherent()</span></code></a>
+states</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>T</strong> – The truncation to use</li>
+<li><strong>alpha</strong> – The complex number prametrising the coherent states</li>
+<li><strong>theta</strong> – The phase differece between the coherent states</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="quoptics.states.cubic_phase">
+<code class="descclassname">quoptics.states.</code><code class="descname">cubic_phase</code><span class="sig-paren">(</span><em>T</em>, <em>gamma</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.cubic_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a finitely squeezed approximation to a cubic phase state</p>
+<div class="math notranslate nohighlight">
+\[\lvert \gamma , z \rangle = e^{i \gamma \widehat{q}^3} \widehat{S} (z)\
+\lvert 0 \rangle\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>T</strong> – The truncation to use</li>
+<li><strong>gamma</strong> – The parameter of the cubic phase operator</li>
+<li><strong>z</strong> – The parameter of the squeezing operators</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="quoptics.states.on_state">
+<code class="descclassname">quoptics.states.</code><code class="descname">on_state</code><span class="sig-paren">(</span><em>T</em>, <em>n</em>, <em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.on_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a normalised ON state of the form</p>
+<div class="math notranslate nohighlight">
+\[\lvert \text{ON} \rangle = \mathcal{N} \left ( \lvert 0 \rangle + \
+\delta \lvert N \rangle \right )\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>T</strong> – The truncation to use</li>
+<li><strong>N</strong> – The Fock state to take a superposition of the vacuum with</li>
+<li><strong>delta</strong> – Coefficient of the non-vacuum Fock state</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="quoptics.states.random_states">
+<code class="descclassname">quoptics.states.</code><code class="descname">random_states</code><span class="sig-paren">(</span><em>T</em>, <em>n</em>, <em>cutoff=25</em>, <em>qutip=True</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.random_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns n randomly generated states and their labels</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>T</strong> – The truncation to use when generating the states</li>
+<li><strong>n</strong> – How many states to generate</li>
+<li><strong>cutoff</strong> – The length of the generated state vectors</li>
+<li><strong>qutip</strong> – Whether to return states as <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> or numpy
+arrays</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tuple containing an array of states and an array of labels</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="quoptics.states.squeezed">
+<code class="descclassname">quoptics.states.</code><code class="descname">squeezed</code><span class="sig-paren">(</span><em>T</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.squeezed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a squeezed state</p>
+<div class="math notranslate nohighlight">
+\[\lvert z \rangle = \widehat{S}(z) \lvert 0 \rangle\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>T</strong> – The truncation to use</li>
+<li><strong>z</strong> – The squeezing parameter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="quoptics.states.squeezed_cat">
+<code class="descclassname">quoptics.states.</code><code class="descname">squeezed_cat</code><span class="sig-paren">(</span><em>T</em>, <em>alpha</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.squeezed_cat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a squeezed cat state. This is done by generating a perfect
+<a class="reference internal" href="#quoptics.states.cat" title="quoptics.states.cat"><code class="xref py py-func docutils literal notranslate"><span class="pre">cat()</span></code></a> state (i.e. <span class="math notranslate nohighlight">\(\theta=0\)</span>), then applying
+the single-mode squeezing operator.</p>
+<div class="math notranslate nohighlight">
+\[\lvert \psi \rangle = \widehat{S}(z) \lvert \text{cat} \rangle\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>T</strong> – The truncation to use</li>
+<li><strong>alpha</strong> – The complex number parametrising the cat state</li>
+<li><strong>z</strong> – The sqeezing parameter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="quoptics.states.zombie">
+<code class="descclassname">quoptics.states.</code><code class="descname">zombie</code><span class="sig-paren">(</span><em>T</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.zombie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a normalised zombie cat state of the form</p>
+<div class="math notranslate nohighlight">
+\[\lvert \text{zombie} \rangle = \mathcal{N} \left( \lvert \alpha \rangle + \
+\lvert e^{2 \pi i /3} \alpha \rangle + \
+\lvert e^{4 \pi i /3} \alpha \rangle \right )\]</div>
+<p>Where <span class="math notranslate nohighlight">\(\lvert \alpha \rangle\)</span> are <a class="reference external" href="http://qutip.org/docs/latest/apidoc/functions.html#qutip.states.coherent" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">coherent()</span></code></a>
+states</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>T</strong> – The truncation to use</li>
+<li><strong>alpha</strong> – Complex number parametrising the coherent state</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-quoptics">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-quoptics" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">quoptics package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-quoptics.network">quoptics.network module</a></li>
+<li><a class="reference internal" href="#module-quoptics.states">quoptics.states module</a></li>
+<li><a class="reference internal" href="#module-quoptics">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/quoptics.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">QuOptics  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Lewis O&#39;Driscoll.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+    </div>
+  </body>
+</html>
