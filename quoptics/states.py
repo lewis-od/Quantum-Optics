@@ -184,7 +184,7 @@ class StateIterator(object):
             raise StopIteration
 
         if not self.qutip:
-            state = np.abs(state.data.toarray().T[0])
+            state = to_numpy(state)
 
         self.n += 1
         return state, label
@@ -208,3 +208,13 @@ def random_states(T, n, cutoff=25, qutip=True):
         states = np.array([s[:cutoff] for s in states])
     labels = np.array(labels)
     return states, labels
+
+def to_numpy(state):
+    r"""
+    Convert a :class:`qutip.Qobj` instance to a numpy array, formatted so that
+    :class:`~quoptics.NeuralNetwork` can interpret it
+
+    :param state: A :class:`qutip.Qobj` instace
+    :returns: A numpy array containing the state data
+    """
+    return np.abs(state.data.toarray().T[0])

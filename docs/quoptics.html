@@ -348,6 +348,23 @@ the single-mode squeezing operator.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="quoptics.states.to_numpy">
+<code class="descclassname">quoptics.states.</code><code class="descname">to_numpy</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.to_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> instance to a numpy array, formatted so that
+<code class="xref py py-class docutils literal notranslate"><span class="pre">NeuralNetwork</span></code> can interpret it</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> – A <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> instace</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A numpy array containing the state data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="quoptics.states.zombie">
 <code class="descclassname">quoptics.states.</code><code class="descname">zombie</code><span class="sig-paren">(</span><em>T</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.zombie" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a normalised zombie cat state of the form</p>
