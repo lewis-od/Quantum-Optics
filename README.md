@@ -24,6 +24,7 @@ for the network in the `data` folder. The data is produced as an array of states
 |   2    |    Zombie    |
 |   3    |  Cubic Phase |
 |   4    |      ON      |
+|   5    |    Useless   |
 
 Running `python3 test_network.py` will load the pre-trained model from the
 `model` folder, and test it's accuracy against the data in `data/test.npz`.

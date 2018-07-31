@@ -1,11 +1,12 @@
 """
 Methods for generating different types of state
 """
+from qutip import Qobj
 from qutip.states import coherent, basis
 from qutip.operators import squeeze, position
 import numpy as np
 
-TYPES = ['cat', 'zombie', 'squeezed_cat', 'cubic_phase', 'on']
+TYPES = ['cat', 'zombie', 'squeezed_cat', 'cubic_phase', 'on', 'useless']
 
 def cat(T, alpha, theta=0):
     r"""
@@ -121,6 +122,23 @@ def on_state(T, n, delta):
     N = basis(T, n)
     return (O + delta*N).unit()
 
+def useless(T):
+    r"""
+    Generates a random, normalised 'useless' state. Values towards the end of
+    the state vector are exponentially less likely to be populated.
+
+    :param T: The truncation to use
+    :returns: A :class:`qutip.Qobj` instance
+    """
+    data = np.zeros(T)
+    rands = np.random.rand(T)
+    k = (T-1)/np.log(0.5)
+    rands *= np.array([np.exp(n/k) for n in range(0, T)])
+    flips = np.round(rands)
+    n_values = int(np.sum(flips))
+    data[flips == 1] = np.random.rand(n_values)
+    return Qobj(data).unit()
+
 class StateIterator(object):
     r"""
     An `iterator <https://docs.python.org/3/glossary.html#term-iterator>`_
@@ -156,14 +174,14 @@ class StateIterator(object):
         if type == 'cat':
             # Choose sign of cat state at random
             theta = np.random.rand() * np.pi * 2
-            alpha = self._rand_complex(1.0)
+            alpha = self._rand_complex(2.0)
             state = cat(self.T, alpha, theta)
         elif type == 'zombie':
-            alpha = self._rand_complex(1.0)
+            alpha = self._rand_complex(2.0)
             state = zombie(self.T, alpha)
         elif type == 'squeezed_cat':
-            alpha = self._rand_complex(1.0)
-            z = self._rand_complex(1.0)
+            alpha = self._rand_complex(2.0)
+            z = self._rand_complex(1.4)
             state = squeezed_cat(self.T, alpha, z)
         elif type == 'cubic_phase':
             gamma = np.random.rand() * 0.25
@@ -173,6 +191,8 @@ class StateIterator(object):
             n = np.random.randint(1, self.cutoff)
             delta = np.random.rand()
             state = on_state(self.T, n, delta)
+        elif type == 'useless':
+            state = useless(self.T)
         else:
             raise ValueError("Invalid type supplied")
 
@@ -209,7 +229,7 @@ def random_states(T, n, cutoff=25, qutip=True):
 def to_numpy(state):
     r"""
     Convert a :class:`qutip.Qobj` instance to a numpy array, formatted so that
-    :class:`~quoptics.NeuralNetwork` can interpret it
+    :class:`~quoptics.network.NeuralNetwork` can interpret it
 
     :param state: A :class:`qutip.Qobj` instace
     :returns: A numpy array containing the state data

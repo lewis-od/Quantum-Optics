@@ -63,6 +63,8 @@ The integers labelling the classes are as follows:
 +---------+---------------+
 |    4    |      ON       |
 +---------+---------------+
+|    45   |    Useless    |
++---------+---------------+
 
 The :func:`~quoptics.network.NeuralNetwork.predict` function expects an array
 of states, and returns data in the same format as a
