@@ -59,7 +59,9 @@
 \[\lvert \psi \rangle = \sum_{n=o}^{\infty} c_n \lvert n \rangle\]</div>
 <p>where the <span class="math notranslate nohighlight">\(\lvert n \rangle\)</span> are Fock states, the network expects the
 state data to be in the form of a numpy array, where the <span class="math notranslate nohighlight">\(n\)</span> th
-element is the modulus of <span class="math notranslate nohighlight">\(c_n\)</span>.</p>
+element is the modulus of <span class="math notranslate nohighlight">\(c_n\)</span>. The function
+<a class="reference internal" href="#quoptics.states.to_numpy" title="quoptics.states.to_numpy"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_numpy()</span></code></a> converts <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> instances
+to this form.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

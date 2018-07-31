@@ -14,7 +14,9 @@ class NeuralNetwork(object):
 
     where the :math:`\lvert n \rangle` are Fock states, the network expects the
     state data to be in the form of a numpy array, where the :math:`n` th
-    element is the modulus of :math:`c_n`.
+    element is the modulus of :math:`c_n`. The function
+    :func:`~quoptics.states.to_numpy` converts :class:`qutip.Qobj` instances
+    to this form.
 
     :param model_dir: The directory to save/load the model data to/from
     :param dropout: The dropout probability to use when training
