@@ -69,8 +69,10 @@ class NeuralNetwork(object):
         Test the neural network against a test dataset
 
         :param test_file: The file containing the test data
-        :returns metrics: Various metrics about the accuracy of the network
-        :returns conf_mat: The confusion matrix
+        :returns metrics: A dictionary containing various metrics about the
+            accuracy of the network
+        :returns conf_mat: The confusion matrix. Rows represent actual labels
+            and columns represent predicted labels
         """
         test_fn = functools.partial(self.__input_fn, test_file)
         metrics = self.estimator.evaluate(input_fn=test_fn, steps=1)
