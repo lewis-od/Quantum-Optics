@@ -31,7 +31,7 @@ class NeuralNetwork(object):
         estimator = tf.estimator.DNNClassifier(
                 feature_columns=[coefficients],
                 hidden_units=[25, 25, 10],
-                n_classes=6,
+                n_classes=5,
                 optimizer=tf.train.AdamOptimizer(learning_rate=learning_rate),
                 dropout=dropout,
                 model_dir=model_dir

@@ -5,7 +5,7 @@ from qutip.states import coherent, basis
 from qutip.operators import squeeze, position
 import numpy as np
 
-TYPES = ['fock', 'cat', 'zombie', 'squeezed_cat', 'cubic_phase', 'on']
+TYPES = ['cat', 'zombie', 'squeezed_cat', 'cubic_phase', 'on']
 
 def cat(T, alpha, theta=0):
     r"""
@@ -153,10 +153,7 @@ class StateIterator(object):
         label = self.n % len(self.types)
         type = self.types[label]
 
-        if type == 'fock':
-            n_photons = np.random.randint(0, self.cutoff)
-            state = basis(self.T, n_photons)
-        elif type == 'cat':
+        if type == 'cat':
             # Choose sign of cat state at random
             theta = np.random.rand() * np.pi * 2
             alpha = self._rand_complex(1.0)
@@ -170,7 +167,7 @@ class StateIterator(object):
             state = squeezed_cat(self.T, alpha, z)
         elif type == 'cubic_phase':
             gamma = np.random.rand() * 0.25
-            z = np.random.exponential(2)
+            z = np.random.rand() * -1.4
             state = cubic_phase(self.T, gamma, z)
         elif type == 'on':
             n = np.random.randint(1, self.cutoff)
