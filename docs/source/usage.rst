@@ -53,17 +53,15 @@ The integers labelling the classes are as follows:
 +---------+---------------+
 | Integer | Type of State |
 +=========+===============+
-|    0    |     Fock      |
+|    0    |     Cat       |
 +---------+---------------+
-|    1    |     Cat       |
+|    1    |    Zombie     |
 +---------+---------------+
-|    2    |    Zombie     |
+|    2    |  Squeezed Cat |
 +---------+---------------+
-|    3    |  Squeezed Cat |
+|    3    |  Cubic Phase  |
 +---------+---------------+
-|    4    |  Cubic Phase  |
-+---------+---------------+
-|    5    |      ON       |
+|    4    |      ON       |
 +---------+---------------+
 
 The :func:`~quoptics.network.NeuralNetwork.predict` function expects an array

@@ -19,12 +19,11 @@ for the network in the `data` folder. The data is produced as an array of states
 
 | Label  |  State Type  |
 | ------ | ------------ |
-|   0    |     Fock     |
-|   1    |     Cat      |
-|   2    | Squeezed Cat |
-|   3    |    Zombie    |
-|   4    |  Cubic Phase |
-|   5    |      ON      |
+|   0    |     Cat      |
+|   1    | Squeezed Cat |
+|   2    |    Zombie    |
+|   3    |  Cubic Phase |
+|   4    |      ON      |
 
 Running `python3 test_network.py` will load the pre-trained model from the
 `model` folder, and test it's accuracy against the data in `data/test.npz`.
