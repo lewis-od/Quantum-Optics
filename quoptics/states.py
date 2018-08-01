@@ -149,6 +149,8 @@ class StateIterator(object):
         (requires qutip=False)
     :param qutip: If True, states are generated as :class:`qutip.Qobj`,
         otherwise they're generated as numpy arrays
+    :ivar types: An array of strings containing the names of types of state to
+        generate
     """
     def __init__(self, batch_size, T=100, cutoff=25, qutip=True):
         self.n = 0

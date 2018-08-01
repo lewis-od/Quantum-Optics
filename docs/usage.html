@@ -48,6 +48,8 @@
             
   <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="neural-network">
+<h2>Neural Network<a class="headerlink" href="#neural-network" title="Permalink to this headline">¶</a></h2>
 <p>To initialise the neural network, create an instance of the
 <a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork" title="quoptics.network.NeuralNetwork"><code class="xref py py-class docutils literal notranslate"><span class="pre">NeuralNetwork</span></code></a> class:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quoptics.network</span> <span class="kn">import</span> <span class="n">NeuralNetwork</span>
@@ -58,6 +60,8 @@
 <p>Where <cite>model_dir</cite> is a string containing the location of a directory. If the
 directory does not exist, it will be created, and information about the trained
 network will be saved there.</p>
+<div class="section" id="training">
+<h3>Training<a class="headerlink" href="#training" title="Permalink to this headline">¶</a></h3>
 <p>To train the network run:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_file</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
 </pre></div>
@@ -66,8 +70,9 @@ network will be saved there.</p>
 <cite>data/gen_data.py</cite> which contains the training data and labels. The learning
 rate of the network can be set by changing the value of
 <code class="code docutils literal notranslate"><span class="pre">net.learning_rate</span></code>.</p>
-<p>To load the trained network at a later date, simply initialise the
-<a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork" title="quoptics.network.NeuralNetwork"><code class="xref py py-class docutils literal notranslate"><span class="pre">NeuralNetwork</span></code></a> instance with the same model directory.</p>
+</div>
+<div class="section" id="classifying-states">
+<h3>Classifying States<a class="headerlink" href="#classifying-states" title="Permalink to this headline">¶</a></h3>
 <p>When classifying states of the form:</p>
 <div class="math notranslate nohighlight">
 \[\lvert \psi \rangle = \sum_{n=0}^{\infty} c_n \lvert n \rangle\]</div>
@@ -77,12 +82,15 @@ are the modulus of the coefficients <span class="math notranslate nohighlight">\
 some useful types of state. The functions generate <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a>
 instances. To convert these to a format compatible with the neural network, use
 the <a class="reference internal" href="quoptics.html#quoptics.states.to_numpy" title="quoptics.states.to_numpy"><code class="xref py py-func docutils literal notranslate"><span class="pre">quoptics.states.to_numpy()</span></code></a> function.</p>
-<p>Once the state data is in the correct format, you can classify it using one of
-the following methods:</p>
+<p>To initialise the trained, simply create the
+<a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork" title="quoptics.network.NeuralNetwork"><code class="xref py py-class docutils literal notranslate"><span class="pre">NeuralNetwork</span></code></a> instance with the same model directory
+that you used when training.</p>
+<p>Once the network is initialised and the state data is in the correct format, you
+can classify states using one of the following methods:</p>
 <ul class="simple">
-<li><a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.classify" title="quoptics.network.NeuralNetwork.classify"><code class="xref py py-func docutils literal notranslate"><span class="pre">classify()</span></code></a></li>
-<li><a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.classify_dist" title="quoptics.network.NeuralNetwork.classify_dist"><code class="xref py py-func docutils literal notranslate"><span class="pre">classify_dist()</span></code></a></li>
-<li><a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.predict" title="quoptics.network.NeuralNetwork.predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">predict()</span></code></a></li>
+<li><a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.classify" title="quoptics.network.NeuralNetwork.classify"><code class="xref py py-meth docutils literal notranslate"><span class="pre">classify()</span></code></a></li>
+<li><a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.classify_dist" title="quoptics.network.NeuralNetwork.classify_dist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">classify_dist()</span></code></a></li>
+<li><a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.predict" title="quoptics.network.NeuralNetwork.predict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">predict()</span></code></a></li>
 </ul>
 <p>The integers labelling the classes are as follows:</p>
 <table border="1" class="docutils">
@@ -116,9 +124,38 @@ the following methods:</p>
 </tr>
 </tbody>
 </table>
+<p>There is an array that can be accessed at <cite>quoptics.states.TYPES</cite> which
+contains the names of each type of state at the index corresponding to their
+class.</p>
 <p>The <a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.predict" title="quoptics.network.NeuralNetwork.predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">predict()</span></code></a> function expects an array
 of states, and returns data in the same format as a
 <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator#predict">Tensorflow Estimator</a>.</p>
+</div>
+</div>
+<div class="section" id="states">
+<h2>States<a class="headerlink" href="#states" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="quoptics.html#module-quoptics.states" title="quoptics.states"><code class="xref any py py-mod docutils literal notranslate"><span class="pre">quoptics.states</span></code></a> module contains code for generating various types of
+interesting states. The states available are:</p>
+<ul class="simple">
+<li><a class="reference internal" href="quoptics.html#quoptics.states.cat" title="quoptics.states.cat"><code class="xref py py-func docutils literal notranslate"><span class="pre">cat()</span></code></a></li>
+<li><a class="reference internal" href="quoptics.html#quoptics.states.zombie" title="quoptics.states.zombie"><code class="xref py py-func docutils literal notranslate"><span class="pre">zombie()</span></code></a></li>
+<li><a class="reference internal" href="quoptics.html#quoptics.states.squeezed_cat" title="quoptics.states.squeezed_cat"><code class="xref py py-func docutils literal notranslate"><span class="pre">squeezed_cat()</span></code></a></li>
+<li><a class="reference internal" href="quoptics.html#quoptics.states.cubic_phase" title="quoptics.states.cubic_phase"><code class="xref py py-func docutils literal notranslate"><span class="pre">cubic_phase()</span></code></a></li>
+<li><a class="reference internal" href="quoptics.html#quoptics.states.on_state" title="quoptics.states.on_state"><code class="xref py py-func docutils literal notranslate"><span class="pre">on_state()</span></code></a></li>
+<li><a class="reference internal" href="quoptics.html#quoptics.states.useless" title="quoptics.states.useless"><code class="xref py py-func docutils literal notranslate"><span class="pre">useless()</span></code></a></li>
+</ul>
+<p>All of these functions return states in the form of a <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a>. These
+objects can be converted into a form acceptable by the neural network using
+the <a class="reference internal" href="quoptics.html#quoptics.states.to_numpy" title="quoptics.states.to_numpy"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_numpy()</span></code></a> function.</p>
+<p>The <a class="reference internal" href="quoptics.html#module-quoptics.states" title="quoptics.states"><code class="xref any py py-mod docutils literal notranslate"><span class="pre">quoptics.states</span></code></a> module also implements a
+<a class="reference internal" href="quoptics.html#quoptics.states.StateIterator" title="quoptics.states.StateIterator"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateIterator</span></code></a> class, which is an iterator object that
+generates random states. This is used by the script
+<a class="reference external" href="https://github.com/lewis-od/Quantum-Optics/blob/master/data/gen_data.py">data/gen_data.py</a> to
+generate the training/test data for the network.</p>
+<p>Instead of using the <a class="reference internal" href="quoptics.html#quoptics.states.StateIterator" title="quoptics.states.StateIterator"><code class="xref py py-class docutils literal notranslate"><span class="pre">StateIterator</span></code></a> directly, it may be
+more convenient to use the <a class="reference internal" href="quoptics.html#quoptics.states.random_states" title="quoptics.states.random_states"><code class="xref py py-func docutils literal notranslate"><span class="pre">random_states()</span></code></a> function,
+which unpacks the iterator for you.</p>
+</div>
 </div>
 
 
@@ -127,6 +164,19 @@ of states, and returns data in the same format as a
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Usage</a><ul>
+<li><a class="reference internal" href="#neural-network">Neural Network</a><ul>
+<li><a class="reference internal" href="#training">Training</a></li>
+<li><a class="reference internal" href="#classifying-states">Classifying States</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#states">States</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
                         title="previous chapter">Welcome to QuOptics’s documentation!</a></p>
