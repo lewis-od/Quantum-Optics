@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from quoptics_old.states import Fock
+from quoptics.states import Fock
 
 class TestFock(unittest.TestCase):
 
