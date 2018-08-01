@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to QuOptics's documentation!
+Welcome to QuOptics' documentation!
 ====================================
 
 .. toctree::
@@ -13,6 +13,7 @@ Welcome to QuOptics's documentation!
    usage
    modules
 
+* `This project on GitHub <https://github.com/lewis-od/Quantum-Optics>`_ |githubicon|_
 
 
 Indices and tables
@@ -21,3 +22,6 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+.. |githubicon| image:: http://i.imgur.com/9I6NRUm.png
+.. _githubicon: https://github.com/lewis-od/Quantum-Optics
