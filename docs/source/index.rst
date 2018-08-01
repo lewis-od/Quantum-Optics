@@ -11,6 +11,7 @@ Welcome to QuOptics's documentation!
    :caption: Contents:
 
    usage
+   modules
 
 
 
