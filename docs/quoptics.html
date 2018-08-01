@@ -177,13 +177,16 @@ and columns represent predicted labels</td>
 </div>
 <div class="section" id="module-quoptics.states">
 <span id="quoptics-states-module"></span><h2>quoptics.states module<a class="headerlink" href="#module-quoptics.states" title="Permalink to this headline">¶</a></h2>
-<p>Methods for generating different types of state</p>
+<p>Methods for generating different types of state.</p>
+<p>In all of the below text, <span class="math notranslate nohighlight">\(\mathcal{N}\)</span> is a normalisation constant,
+<span class="math notranslate nohighlight">\(\widehat{S}(z)\)</span> is the single-mode squeezing operator, and
+<span class="math notranslate nohighlight">\(\lvert \alpha \rangle\)</span> are <a class="reference external" href="http://qutip.org/docs/latest/apidoc/functions.html#qutip.states.coherent" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">coherent()</span></code></a> states.</p>
 <dl class="class">
 <dt id="quoptics.states.StateIterator">
 <em class="property">class </em><code class="descclassname">quoptics.states.</code><code class="descname">StateIterator</code><span class="sig-paren">(</span><em>batch_size</em>, <em>T=100</em>, <em>cutoff=25</em>, <em>qutip=True</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.StateIterator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>An <a class="reference external" href="https://docs.python.org/3/glossary.html#term-iterator">iterator</a>
-object that generates random states</p>
+object that generates random states.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -191,9 +194,10 @@ object that generates random states</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>batch_size</strong> – How many states to generate</li>
 <li><strong>T</strong> – The truncation to when generating each state</li>
-<li><strong>cutoff</strong> – The length of the generated state vectors</li>
-<li><strong>qutip</strong> – Whether to return states as <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> or numpy
-arrays</li>
+<li><strong>cutoff</strong> – The length of the generated state arrays
+(requires qutip=False)</li>
+<li><strong>qutip</strong> – If True, states are generated as <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a>,
+otherwise they’re generated as numpy arrays</li>
 </ul>
 </td>
 </tr>
@@ -204,12 +208,10 @@ arrays</li>
 <dl class="function">
 <dt id="quoptics.states.cat">
 <code class="descclassname">quoptics.states.</code><code class="descname">cat</code><span class="sig-paren">(</span><em>T</em>, <em>alpha</em>, <em>theta=0</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.cat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a  normalised cat state of the form</p>
+<dd><p>Generates a  normalised cat state of the form:</p>
 <div class="math notranslate nohighlight">
 \[\lvert \text{cat} \rangle_{\theta} = \mathcal{N} \left ( \lvert \alpha \
 \rangle + e^{i\theta} \lvert -\alpha \rangle \right )\]</div>
-<p>Where <span class="math notranslate nohighlight">\(\lvert \alpha \rangle\)</span> are <a class="reference external" href="http://qutip.org/docs/latest/apidoc/functions.html#qutip.states.coherent" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">coherent()</span></code></a>
-states</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -231,7 +233,7 @@ states</p>
 <dl class="function">
 <dt id="quoptics.states.cubic_phase">
 <code class="descclassname">quoptics.states.</code><code class="descname">cubic_phase</code><span class="sig-paren">(</span><em>T</em>, <em>gamma</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.cubic_phase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a finitely squeezed approximation to a cubic phase state</p>
+<dd><p>Generates a finitely squeezed approximation to a cubic phase state.</p>
 <div class="math notranslate nohighlight">
 \[\lvert \gamma , z \rangle = e^{i \gamma \widehat{q}^3} \widehat{S} (z)\
 \lvert 0 \rangle\]</div>
@@ -256,7 +258,7 @@ states</p>
 <dl class="function">
 <dt id="quoptics.states.on_state">
 <code class="descclassname">quoptics.states.</code><code class="descname">on_state</code><span class="sig-paren">(</span><em>T</em>, <em>n</em>, <em>delta</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.on_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a normalised ON state of the form</p>
+<dd><p>Generates a normalised ON state of the form:</p>
 <div class="math notranslate nohighlight">
 \[\lvert \text{ON} \rangle = \mathcal{N} \left ( \lvert 0 \rangle + \
 \delta \lvert N \rangle \right )\]</div>
@@ -332,7 +334,7 @@ arrays</li>
 <a class="reference internal" href="#quoptics.states.cat" title="quoptics.states.cat"><code class="xref py py-func docutils literal notranslate"><span class="pre">cat()</span></code></a> state (i.e. <span class="math notranslate nohighlight">\(\theta=0\)</span>), then applying
 the single-mode squeezing operator.</p>
 <div class="math notranslate nohighlight">
-\[\lvert \psi \rangle = \widehat{S}(z) \lvert \text{cat} \rangle\]</div>
+\[\lvert \text{cat}, z \rangle = \widehat{S}(z) \lvert \text{cat} \rangle\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -355,7 +357,9 @@ the single-mode squeezing operator.</p>
 <dt id="quoptics.states.to_numpy">
 <code class="descclassname">quoptics.states.</code><code class="descname">to_numpy</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.to_numpy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a> instance to a numpy array, formatted so that
-<a class="reference internal" href="#quoptics.network.NeuralNetwork" title="quoptics.network.NeuralNetwork"><code class="xref py py-class docutils literal notranslate"><span class="pre">NeuralNetwork</span></code></a> can interpret it</p>
+<a class="reference internal" href="#quoptics.network.NeuralNetwork" title="quoptics.network.NeuralNetwork"><code class="xref py py-class docutils literal notranslate"><span class="pre">NeuralNetwork</span></code></a> can interpret it.</p>
+<p>The nth entry of the array is the modulus of the coefficient of the nth Fock
+state.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -388,13 +392,11 @@ the state vector are exponentially less likely to be populated.</p>
 <dl class="function">
 <dt id="quoptics.states.zombie">
 <code class="descclassname">quoptics.states.</code><code class="descname">zombie</code><span class="sig-paren">(</span><em>T</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.zombie" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a normalised zombie cat state of the form</p>
+<dd><p>Generates a normalised zombie cat state of the form:</p>
 <div class="math notranslate nohighlight">
 \[\lvert \text{zombie} \rangle = \mathcal{N} \left( \lvert \alpha \rangle + \
 \lvert e^{2 \pi i /3} \alpha \rangle + \
 \lvert e^{4 \pi i /3} \alpha \rangle \right )\]</div>
-<p>Where <span class="math notranslate nohighlight">\(\lvert \alpha \rangle\)</span> are <a class="reference external" href="http://qutip.org/docs/latest/apidoc/functions.html#qutip.states.coherent" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">coherent()</span></code></a>
-states</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

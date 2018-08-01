@@ -1,24 +1,26 @@
-"""
-Methods for generating different types of state
+r"""
+Methods for generating different types of state.
+
+In all of the below text, :math:`\mathcal{N}` is a normalisation constant,
+:math:`\widehat{S}(z)` is the single-mode squeezing operator, and
+:math:`\lvert \alpha \rangle` are :func:`~qutip.states.coherent` states.
 """
 from qutip import Qobj
 from qutip.states import coherent, basis
 from qutip.operators import squeeze, position
 import numpy as np
 
+# The types of state provided by this module
 TYPES = ['cat', 'zombie', 'squeezed_cat', 'cubic_phase', 'on', 'useless']
 
 def cat(T, alpha, theta=0):
     r"""
-    Generates a  normalised cat state of the form
+    Generates a  normalised cat state of the form:
 
     .. math::
 
         \lvert \text{cat} \rangle_{\theta} = \mathcal{N} \left ( \lvert \alpha \
         \rangle + e^{i\theta} \lvert -\alpha \rangle \right )
-
-    Where :math:`\lvert \alpha \rangle` are :func:`~qutip.states.coherent`
-    states
 
     :param T: The truncation to use
     :param alpha: The complex number prametrising the coherent states
@@ -31,16 +33,13 @@ def cat(T, alpha, theta=0):
 
 def zombie(T, alpha):
     r"""
-    Generates a normalised zombie cat state of the form
+    Generates a normalised zombie cat state of the form:
 
     .. math::
 
         \lvert \text{zombie} \rangle = \mathcal{N} \left( \lvert \alpha \rangle + \
         \lvert e^{2 \pi i /3} \alpha \rangle + \
         \lvert e^{4 \pi i /3} \alpha \rangle \right )
-
-    Where :math:`\lvert \alpha \rangle` are :func:`~qutip.states.coherent`
-    states
 
     :param T: The truncation to use
     :param alpha: Complex number parametrising the coherent state
@@ -73,7 +72,7 @@ def squeezed_cat(T, alpha, z):
     the single-mode squeezing operator.
 
     .. math::
-        \lvert \psi \rangle = \widehat{S}(z) \lvert \text{cat} \rangle
+        \lvert \text{cat}, z \rangle = \widehat{S}(z) \lvert \text{cat} \rangle
 
     :param T: The truncation to use
     :param alpha: The complex number parametrising the cat state
@@ -86,7 +85,7 @@ def squeezed_cat(T, alpha, z):
 
 def cubic_phase(T, gamma, z):
     r"""
-    Generates a finitely squeezed approximation to a cubic phase state
+    Generates a finitely squeezed approximation to a cubic phase state.
 
     .. math::
 
@@ -106,7 +105,7 @@ def cubic_phase(T, gamma, z):
 
 def on_state(T, n, delta):
     r"""
-    Generates a normalised ON state of the form
+    Generates a normalised ON state of the form:
 
     .. math::
 
@@ -142,13 +141,14 @@ def useless(T):
 class StateIterator(object):
     r"""
     An `iterator <https://docs.python.org/3/glossary.html#term-iterator>`_
-    object that generates random states
+    object that generates random states.
 
     :param batch_size: How many states to generate
     :param T: The truncation to when generating each state
-    :param cutoff: The length of the generated state vectors
-    :param qutip: Whether to return states as :class:`qutip.Qobj` or numpy
-        arrays
+    :param cutoff: The length of the generated state arrays
+        (requires qutip=False)
+    :param qutip: If True, states are generated as :class:`qutip.Qobj`,
+        otherwise they're generated as numpy arrays
     """
     def __init__(self, batch_size, T=100, cutoff=25, qutip=True):
         self.n = 0
@@ -229,7 +229,10 @@ def random_states(T, n, cutoff=25, qutip=True):
 def to_numpy(state):
     r"""
     Convert a :class:`qutip.Qobj` instance to a numpy array, formatted so that
-    :class:`~quoptics.network.NeuralNetwork` can interpret it
+    :class:`~quoptics.network.NeuralNetwork` can interpret it.
+
+    The nth entry of the array is the modulus of the coefficient of the nth Fock
+    state.
 
     :param state: A :class:`qutip.Qobj` instace
     :returns: A numpy array containing the state data
