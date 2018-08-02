@@ -36,7 +36,7 @@ if __name__ == '__main__':
     parser.add_argument('--validation', type=int, required=False, default=2000,
         help='Number of states to generate for validation (default: 2000)')
     parser.add_argument('--truncation', type=int, required=False, default=80,
-        help='Size of matrices to use when calculating states (default: 100)',
+        help='Size of matrices to use when calculating states (default: 80)',
         metavar='T')
     parser.add_argument('--cutoff', type=int, required=False, default=25,
         help='Length of state vectors generated (default: 25)', metavar='LEN')
