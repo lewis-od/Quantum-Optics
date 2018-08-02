@@ -52,6 +52,56 @@
             
   <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="generating-data">
+<h2>Generating Data<a class="headerlink" href="#generating-data" title="Permalink to this headline">¶</a></h2>
+<p>The script at <cite>data/gen_data.py</cite> is for generating training/test/validation
+data. From the <cite>data</cite> directory, run <code class="code docutils literal notranslate"><span class="pre">python3</span> <span class="pre">gen_data.py</span></code> with any of the
+following options:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gen_data.py [-h] [--training TRAINING] [--test TEST]
+             [--validation VALIDATION] [--truncation T] [--cutoff LEN]
+
+Generate data for training the neural network
+
+optional arguments:
+-h, --help            show this help message and exit
+--training TRAINING   Number of states to generate for training (default:
+                      5000)
+--test TEST           Number of states to generate for testing (default:
+                      2000)
+--validation VALIDATION
+                      Number of states to generate for validation (default:
+                      2000)
+--truncation T        Size of matrices to use when calculating states
+                      (default: 80)
+--cutoff LEN          Length of state vectors generated (default: 25)
+</pre></div>
+</div>
+<p>The value of truncation is the size of the matrices used when generating states,
+and the cutoff value dictates how many entries of each state vector will be
+saved. For example, with the default values, states will be generated with a
+truncation of 80, but only the first 25 values will be saved for each state.</p>
+<p>The script generates roughly equal numbers of each type of state, with random
+values for their parameters chosen from an appropriate distribution.</p>
+<p>Three files will be created in the <cite>data</cite> directory:</p>
+<ul class="simple">
+<li><cite>train.npz</cite> containing the training data</li>
+<li><cite>test.npz</cite> containing the test data</li>
+<li><cite>validation.npz</cite> containing the validation data</li>
+</ul>
+<p>The data is saved in a numpy format, and can be accessed as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c1"># Load the file</span>
+<span class="n">training</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/train.npz&#39;</span><span class="p">)</span>
+
+<span class="c1"># Access the state data</span>
+<span class="n">states</span> <span class="o">=</span> <span class="n">training</span><span class="p">[</span><span class="s1">&#39;states&#39;</span><span class="p">]</span>
+
+<span class="c1"># Access the state labels - labels[i] corresponds to states[i]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">training</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="neural-network">
 <h2>Neural Network<a class="headerlink" href="#neural-network" title="Permalink to this headline">¶</a></h2>
 <p>To initialise the neural network, create an instance of the
@@ -171,6 +221,7 @@ which unpacks the iterator for you.</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Usage</a><ul>
+<li><a class="reference internal" href="#generating-data">Generating Data</a></li>
 <li><a class="reference internal" href="#neural-network">Neural Network</a><ul>
 <li><a class="reference internal" href="#training">Training</a></li>
 <li><a class="reference internal" href="#classifying-states">Classifying States</a></li>

@@ -2,6 +2,64 @@
 Usage
 =====
 
+---------------
+Generating Data
+---------------
+
+The script at `data/gen_data.py` is for generating training/test/validation
+data. From the `data` directory, run :code:`python3 gen_data.py` with any of the
+following options:
+
+.. code-block:: none
+
+    gen_data.py [-h] [--training TRAINING] [--test TEST]
+                 [--validation VALIDATION] [--truncation T] [--cutoff LEN]
+
+    Generate data for training the neural network
+
+    optional arguments:
+    -h, --help            show this help message and exit
+    --training TRAINING   Number of states to generate for training (default:
+                          5000)
+    --test TEST           Number of states to generate for testing (default:
+                          2000)
+    --validation VALIDATION
+                          Number of states to generate for validation (default:
+                          2000)
+    --truncation T        Size of matrices to use when calculating states
+                          (default: 80)
+    --cutoff LEN          Length of state vectors generated (default: 25)
+
+The value of truncation is the size of the matrices used when generating states,
+and the cutoff value dictates how many entries of each state vector will be
+saved. For example, with the default values, states will be generated with a
+truncation of 80, but only the first 25 values will be saved for each state.
+
+The script generates roughly equal numbers of each type of state, with random
+values for their parameters chosen from an appropriate distribution.
+
+Three files will be created in the `data` directory:
+
+* `train.npz` containing the training data
+* `test.npz` containing the test data
+* `validation.npz` containing the validation data
+
+The data is saved in a numpy format, and can be accessed as follows:
+
+.. code-block:: python
+
+    import numpy as np
+
+    # Load the file
+    training = np.load('data/train.npz')
+
+    # Access the state data
+    states = training['states']
+
+    # Access the state labels - labels[i] corresponds to states[i]
+    labels = training['labels']
+
+
 --------------
 Neural Network
 --------------
