@@ -12,25 +12,11 @@ discovered QuTiP, that is all already implemented in QuTiP.
 To ensure the required packages are installed, run
 `pip3 install -r requirements.txt`   
 
-Running `python3 data/gen_data.py` will generate training/test/validation data
-for the network in the `data` folder. The data is produced as an array of states
- and an array of labels, such that `states[n]` is labelled by `label[n]`. The
- labels are integers labelling which type the state is according to:
-
-| Label  |  State Type  |
-| ------ | ------------ |
-|   0    |     Cat      |
-|   1    | Squeezed Cat |
-|   2    |    Zombie    |
-|   3    |  Cubic Phase |
-|   4    |      ON      |
-|   5    |    Useless   |
-
 Running `python3 test_network.py` will load the pre-trained model from the
 `model` folder, and test it's accuracy against the data in `data/test.npz`.
 
 The file [cnn.py](cnn.py) is the start of a convolutional neural network that
 classifies states by analysing a plot of their Wigner function.   
 
-The documentation for the quoptics module is available to view
+The full documentation for the quoptics module is available to view
 [here](https://lewis-od.github.io/Quantum-Optics/).
