@@ -123,7 +123,7 @@ predicted by the network</td>
 <dt id="quoptics.network.NeuralNetwork.predict">
 <code class="descname">predict</code><span class="sig-paren">(</span><em>states</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.network.NeuralNetwork.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the input array through the
-<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator#predict">tensorflow.estimator.Estimator.predict</a>
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/DNNClassifier#predict">tensorflow.estimator.DNNClassifier.predict</a>
 method</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -131,7 +131,8 @@ method</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>states</strong> – A numpy array containing multiple test_states</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary containing the classification information</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An array of dictionaries containing the classification
+information for each input state</td>
 </tr>
 </tbody>
 </table>

@@ -89,11 +89,13 @@ class NeuralNetwork(object):
     def predict(self, states):
         r"""
         Run the input array through the
-        `tensorflow.estimator.Estimator.predict <https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator#predict>`_
+        `tensorflow.estimator.DNNClassifier.predict
+        <https://www.tensorflow.org/api_docs/python/tf/estimator/DNNClassifier#predict>`_
         method
 
         :param states: A numpy array containing multiple test_states
-        :returns: A dictionary containing the classification information
+        :returns: An array of dictionaries containing the classification
+            information for each input state
         """
         pred_input = tf.estimator.inputs.numpy_input_fn(
             { 'coefficients': states }, batch_size=1, shuffle=False)
