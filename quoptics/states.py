@@ -83,23 +83,31 @@ def squeezed_cat(T, alpha, z):
     S = squeeze(T, z)
     return (S * c).unit()
 
-def cubic_phase(T, gamma, z):
+def cubic_phase(T, gamma, r):
     r"""
-    Generates a finitely squeezed approximation to a cubic phase state.
+    Generates a finitely squeezed approximation to a cubic phase state:
 
     .. math::
 
-        \lvert \gamma , z \rangle = e^{i \gamma \widehat{q}^3} \widehat{S} (z)\
+        \lvert \gamma , z \rangle = e^{i \gamma \widehat{q}^3} \widehat{S}(-r)\
         \lvert 0 \rangle
+
+    Note that exact (unphysical) cubic phase states are given by:
+
+    .. math::
+
+        \lvert \gamma \rangle = e^{i \gamma \widehat{q}^3} \lvert 0 \rangle_{p}
+        \\
+        \lvert 0 \rangle_{p} = \lim_{r \to \infty} \widehat{S}(-r) \lvert 0 \rangle
 
     :param T: The truncation to use
     :param gamma: The parameter of the cubic phase operator
-    :param z: The parameter of the squeezing operators
+    :param r: The parameter of the squeezing operator (positive real number)
     :returns: A :class:`qutip.Qobj` instance
     """
     q = position(T)
     V = (1j*gamma*q**3).expm()
-    S = squeeze(T, z)
+    S = squeeze(T, -r)
     vac = basis(T, 0)
     return (V * S * vac)
 
@@ -187,8 +195,8 @@ class StateIterator(object):
             state = squeezed_cat(self.T, alpha, z)
         elif type == 'cubic_phase':
             gamma = np.random.rand() * 0.25
-            z = np.random.rand() * -1.4
-            state = cubic_phase(self.T, gamma, z)
+            r = np.random.rand() * 1.4
+            state = cubic_phase(self.T, gamma, r)
         elif type == 'on':
             n = np.random.randint(1, self.cutoff)
             delta = np.random.rand()

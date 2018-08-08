@@ -241,11 +241,16 @@ generate</p>
 
 <dl class="function">
 <dt id="quoptics.states.cubic_phase">
-<code class="descclassname">quoptics.states.</code><code class="descname">cubic_phase</code><span class="sig-paren">(</span><em>T</em>, <em>gamma</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.cubic_phase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a finitely squeezed approximation to a cubic phase state.</p>
+<code class="descclassname">quoptics.states.</code><code class="descname">cubic_phase</code><span class="sig-paren">(</span><em>T</em>, <em>gamma</em>, <em>r</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.cubic_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a finitely squeezed approximation to a cubic phase state:</p>
 <div class="math notranslate nohighlight">
-\[\lvert \gamma , z \rangle = e^{i \gamma \widehat{q}^3} \widehat{S} (z)\
+\[\lvert \gamma , z \rangle = e^{i \gamma \widehat{q}^3} \widehat{S}(-r)\
 \lvert 0 \rangle\]</div>
+<p>Note that exact (unphysical) cubic phase states are given by:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\lvert \gamma \rangle = e^{i \gamma \widehat{q}^3} \lvert 0 \rangle_{p}
+\\
+\lvert 0 \rangle_{p} = \lim_{r \to \infty} \widehat{S}(-r) \lvert 0 \rangle\end{split}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -253,7 +258,7 @@ generate</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>T</strong> – The truncation to use</li>
 <li><strong>gamma</strong> – The parameter of the cubic phase operator</li>
-<li><strong>z</strong> – The parameter of the squeezing operators</li>
+<li><strong>r</strong> – The parameter of the squeezing operator (positive real number)</li>
 </ul>
 </td>
 </tr>
