@@ -107,12 +107,12 @@ some useful types of state. The functions generate :class:`qutip.Qobj`
 instances. To convert these to a format compatible with the neural network, use
 the :func:`quoptics.states.to_numpy` function.
 
-To initialise the trained, simply create the
+To initialise the trained network, simply create the
 :class:`~quoptics.network.NeuralNetwork` instance with the same model directory
 that you used when training.
 
-Once the network is initialised and the state data is in the correct format, you
-can classify states using one of the following methods:
+Once the network object has been created and the state data is in the correct
+format, you can classify states using one of the following methods:
 
 * :meth:`~quoptics.network.NeuralNetwork.classify`
 * :meth:`~quoptics.network.NeuralNetwork.classify_dist`
@@ -136,14 +136,37 @@ The integers labelling the classes are as follows:
 |    5    |    Useless    |
 +---------+---------------+
 
-There is an array that can be accessed at `quoptics.states.TYPES` which
+There is an array that can be accessed at :code:`quoptics.states.TYPES` which
 contains the names of each type of state at the index corresponding to their
 class.
 
-The :func:`~quoptics.network.NeuralNetwork.predict` function expects an array
-of states, and returns data in the same format as a
+The :func:`~quoptics.network.NeuralNetwork.predict` function expects a numpy
+array of states, and returns data in the same format as a
 `Tensorflow Estimator
-<https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator#predict>`_.
+<https://www.tensorflow.org/api_docs/python/tf/estimator/DNNClassifier#predict>`_.
+This is an array of dictionaries, where the nth dictionary corresponds to the
+nth input state. These dictionaries have the following entries:
+
++---------------+------------------------------------------------------+
+|      Key      |                        Value                         |
++===============+======================================================+
+|    logits     | The values of the output layer of the neural network |
++---------------+------------------------------------------------------+
+| probabilities | :code:`softmax(logits)` - The logits converted to a  |
+|               | probability distribution                             |
++---------------+------------------------------------------------------+
+|   class_ids   | An integer corresponding to the class that the state |
+|               | has been classified as                               |
++---------------+------------------------------------------------------+
+|    classes    | The :code:`class_id` as a string                     |
++---------------+------------------------------------------------------+
+
+
+The :func:`~quoptics.network.NeuralNetwork.classify` function expects a single
+state and returns the :code:`class_id` as an integer.
+
+The :func:`~quoptics.network.NeuralNetwork.classify_dist` function expects a
+single state and returns the :code:`probabilities` array.
 
 ------
 States

@@ -136,11 +136,11 @@ are the modulus of the coefficients <span class="math notranslate nohighlight">\
 some useful types of state. The functions generate <a class="reference external" href="http://qutip.org/docs/latest/apidoc/classes.html#qutip.Qobj" title="(in QuTiP: Quantum Toolbox in Python v4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a>
 instances. To convert these to a format compatible with the neural network, use
 the <a class="reference internal" href="quoptics.html#quoptics.states.to_numpy" title="quoptics.states.to_numpy"><code class="xref py py-func docutils literal notranslate"><span class="pre">quoptics.states.to_numpy()</span></code></a> function.</p>
-<p>To initialise the trained, simply create the
+<p>To initialise the trained network, simply create the
 <a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork" title="quoptics.network.NeuralNetwork"><code class="xref py py-class docutils literal notranslate"><span class="pre">NeuralNetwork</span></code></a> instance with the same model directory
 that you used when training.</p>
-<p>Once the network is initialised and the state data is in the correct format, you
-can classify states using one of the following methods:</p>
+<p>Once the network object has been created and the state data is in the correct
+format, you can classify states using one of the following methods:</p>
 <ul class="simple">
 <li><a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.classify" title="quoptics.network.NeuralNetwork.classify"><code class="xref py py-meth docutils literal notranslate"><span class="pre">classify()</span></code></a></li>
 <li><a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.classify_dist" title="quoptics.network.NeuralNetwork.classify_dist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">classify_dist()</span></code></a></li>
@@ -178,12 +178,45 @@ can classify states using one of the following methods:</p>
 </tr>
 </tbody>
 </table>
-<p>There is an array that can be accessed at <cite>quoptics.states.TYPES</cite> which
+<p>There is an array that can be accessed at <code class="code docutils literal notranslate"><span class="pre">quoptics.states.TYPES</span></code> which
 contains the names of each type of state at the index corresponding to their
 class.</p>
-<p>The <a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.predict" title="quoptics.network.NeuralNetwork.predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">predict()</span></code></a> function expects an array
-of states, and returns data in the same format as a
-<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator#predict">Tensorflow Estimator</a>.</p>
+<p>The <a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.predict" title="quoptics.network.NeuralNetwork.predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">predict()</span></code></a> function expects a numpy
+array of states, and returns data in the same format as a
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/DNNClassifier#predict">Tensorflow Estimator</a>.
+This is an array of dictionaries, where the nth dictionary corresponds to the
+nth input state. These dictionaries have the following entries:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>logits</td>
+<td>The values of the output layer of the neural network</td>
+</tr>
+<tr class="row-odd"><td>probabilities</td>
+<td><code class="code docutils literal notranslate"><span class="pre">softmax(logits)</span></code> - The logits converted to a
+probability distribution</td>
+</tr>
+<tr class="row-even"><td>class_ids</td>
+<td>An integer corresponding to the class that the state
+has been classified as</td>
+</tr>
+<tr class="row-odd"><td>classes</td>
+<td>The <code class="code docutils literal notranslate"><span class="pre">class_id</span></code> as a string</td>
+</tr>
+</tbody>
+</table>
+<p>The <a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.classify" title="quoptics.network.NeuralNetwork.classify"><code class="xref py py-func docutils literal notranslate"><span class="pre">classify()</span></code></a> function expects a single
+state and returns the <code class="code docutils literal notranslate"><span class="pre">class_id</span></code> as an integer.</p>
+<p>The <a class="reference internal" href="quoptics.html#quoptics.network.NeuralNetwork.classify_dist" title="quoptics.network.NeuralNetwork.classify_dist"><code class="xref py py-func docutils literal notranslate"><span class="pre">classify_dist()</span></code></a> function expects a
+single state and returns the <code class="code docutils literal notranslate"><span class="pre">probabilities</span></code> array.</p>
 </div>
 </div>
 <div class="section" id="states">
