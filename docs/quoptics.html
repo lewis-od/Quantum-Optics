@@ -390,7 +390,9 @@ state.</p>
 <dt id="quoptics.states.useless">
 <code class="descclassname">quoptics.states.</code><code class="descname">useless</code><span class="sig-paren">(</span><em>T</em><span class="sig-paren">)</span><a class="headerlink" href="#quoptics.states.useless" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a random, normalised ‘useless’ state. Values towards the end of
-the state vector are exponentially less likely to be populated.</p>
+the state vector are exponentially less likely to be populated, such that
+the first entry is definitely populated, and the last entry has a 50% chance
+of being populated.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

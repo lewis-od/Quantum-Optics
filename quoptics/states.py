@@ -132,7 +132,9 @@ def on_state(T, n, delta):
 def useless(T):
     r"""
     Generates a random, normalised 'useless' state. Values towards the end of
-    the state vector are exponentially less likely to be populated.
+    the state vector are exponentially less likely to be populated, such that
+    the first entry is definitely populated, and the last entry has a 50% chance
+    of being populated.
 
     :param T: The truncation to use
     :returns: A :class:`qutip.Qobj` instance
