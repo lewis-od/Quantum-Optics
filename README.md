@@ -12,5 +12,8 @@ To ensure the required packages are installed, run
 Running `python3 test_network.py` will load the pre-trained model from the
 `model` folder, and test it's accuracy against the data in `data/test.npz`.
 
-The full documentation for the quoptics module is available to view
+The file `interop.m` gives an example of how to call the neural network
+from MATLAB.
+
+Full documentation for the quoptics module is available to view
 [here](https://lewis-od.github.io/Quantum-Optics/).
