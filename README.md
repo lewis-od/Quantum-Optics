@@ -2,7 +2,7 @@
 
 A neural network to classify quantum states of light.
 
-The `quoptics` module contains the `NeuralNetwork` class for classifying states.  
+The `quoptics` module contains the `NeuralNetwork` class for classifying states.
 It also contains helper functions for creating some more exotic
 states, i.e. cat states, using [QuTiP](http://qutip.org). 
 
