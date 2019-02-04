@@ -15,5 +15,10 @@ Running `python3 test_network.py` will load the pre-trained model from the
 The file `interop.m` gives an example of how to call the neural network
 from MATLAB.
 
+A whitepaper describing the usage and training of the neural network in more
+detail, as well as it's integration into 
+[AdaQuantum](https://github.com/paulk444/AdaQuantum) can be found at 
+[arXiv:1812.03183](https://arxiv.org/abs/1812.03183)
+
 Full documentation for the quoptics module is available to view
 [here](https://lewis-od.github.io/Quantum-Optics/).
