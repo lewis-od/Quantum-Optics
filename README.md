@@ -2,6 +2,8 @@
 
 A neural network to classify quantum states of light.
 
+## Usage
+
 The `quoptics` module contains the `NeuralNetwork` class for classifying states.
 It also contains helper functions for creating some more exotic
 states, i.e. cat states, using [QuTiP](http://qutip.org). 
@@ -19,6 +21,8 @@ A whitepaper describing the usage and training of the neural network in more
 detail, as well as it's integration into 
 [AdaQuantum](https://github.com/paulk444/AdaQuantum) can be found at 
 [arXiv:1812.03183](https://arxiv.org/abs/1812.03183)
+
+## Documentation
 
 Full documentation for the quoptics module is available to view
 [here](https://lewis-od.github.io/Quantum-Optics/).
